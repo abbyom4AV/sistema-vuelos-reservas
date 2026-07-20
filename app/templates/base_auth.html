@@ -1,0 +1,206 @@
+<!-- app/templates/base_auth.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<div
+  class="app-shell"
+  data-rol-requerido="{% block rol_requerido %}{% endblock %}"
+>
+
+  <header class="app-navbar">
+    <button
+      class="btn btn-ghost d-lg-none me-2"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#sidebarOffcanvas"
+      aria-controls="sidebarOffcanvas"
+      aria-label="Abrir menú"
+    >
+      <i class="bi bi-list fs-5"></i>
+    </button>
+
+    <a
+      class="navbar-brand"
+      href="{% url 'interfaz:panel' %}"
+    >
+      <span class="brand-mark">
+        <img
+          src="{% static 'img/flytrack-logo.svg' %}"
+          class="brand-logo"
+          alt=""
+        >
+      </span>
+
+      <span>
+        FlyTrack
+        <small class="navbar-brand-subtitle">
+          Vuelos y reservas
+        </small>
+      </span>
+    </a>
+
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <a
+        href="/notificaciones/"
+        class="nav-icon-btn"
+        aria-label="Notificaciones"
+      >
+        <i class="bi bi-bell"></i>
+
+        <span
+          class="badge-dot"
+          id="contador-notificaciones"
+          hidden
+        >
+          0
+        </span>
+      </a>
+
+      <div class="dropdown">
+        <button
+          type="button"
+          class="nav-user border-0 bg-transparent"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          aria-label="Abrir menú de usuario"
+        >
+          <span
+            class="nav-avatar"
+            id="avatar-usuario"
+          >
+            ··
+          </span>
+
+          <span class="nav-user-meta d-none d-sm-block text-start">
+            <span
+              class="nu-name"
+              id="nombre-usuario"
+            >
+              —
+            </span>
+
+            <br>
+
+            <span
+              class="nu-role"
+              id="rol-usuario"
+            >
+              —
+            </span>
+          </span>
+
+          <i class="bi bi-chevron-down text-subtle small ms-1"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+          <li>
+            <h6
+              class="dropdown-header"
+              id="menu-usuario-email"
+            >
+              —
+            </h6>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              href="/cambiar-contrasena/"
+            >
+              <i class="bi bi-shield-lock me-2"></i>
+              Cambiar contraseña
+            </a>
+          </li>
+
+          <li>
+            <a
+              class="dropdown-item"
+              href="/notificaciones/"
+            >
+              <i class="bi bi-bell me-2"></i>
+              Notificaciones
+            </a>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <button
+              type="button"
+              class="dropdown-item text-danger"
+              id="boton-logout"
+            >
+              <i class="bi bi-box-arrow-right me-2"></i>
+              Cerrar sesión
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <aside
+      class="app-sidebar"
+      id="sidebar-desktop"
+    >
+      {% include "interfaz/_sidebar.html" %}
+    </aside>
+
+    <div
+      class="offcanvas offcanvas-start d-lg-none"
+      tabindex="-1"
+      id="sidebarOffcanvas"
+      aria-labelledby="sidebarOffcanvasLabel"
+      style="width: 260px;"
+    >
+      <div class="offcanvas-header">
+        <h5
+          class="offcanvas-title"
+          id="sidebarOffcanvasLabel"
+        >
+          Menú
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Cerrar menú"
+        ></button>
+      </div>
+
+      <div class="offcanvas-body p-2">
+        {% include "interfaz/_sidebar.html" %}
+      </div>
+    </div>
+
+    <main class="app-main">
+      {% block breadcrumbs %}
+      {% endblock %}
+
+      {% block panel %}
+      {% endblock %}
+    </main>
+  </div>
+</div>
+
+<div
+  id="mensaje-error"
+  class="position-fixed bottom-0 end-0 m-3"
+  style="z-index: 1080; max-width: 360px;"
+  role="alert"
+  hidden
+></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/panel.js' %}?v=3"></script>
+
+{% block panel_js %}
+{% endblock %}
+{% endblock %}

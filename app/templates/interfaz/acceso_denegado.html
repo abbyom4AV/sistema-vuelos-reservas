@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Acceso denegado · FlyTrack
+{% endblock %}
+
+{% block contenido %}
+<main
+  class="access-denied-page min-vh-100 d-flex align-items-center justify-content-center p-4"
+>
+  <section
+    class="access-denied-content text-center"
+    aria-labelledby="titulo-acceso-denegado"
+  >
+    <div
+      class="access-denied-icon d-inline-flex align-items-center justify-content-center mb-4"
+      aria-hidden="true"
+    >
+      <i class="bi bi-shield-lock-fill"></i>
+    </div>
+
+    <p
+      class="access-denied-code mb-2 text-uppercase fw-semibold"
+    >
+      Error 403
+    </p>
+
+    <h1
+      id="titulo-acceso-denegado"
+      class="display-4 fw-bold mb-3"
+    >
+      Acceso denegado
+    </h1>
+
+    <p class="fs-5 text-muted mb-4">
+      Tu cuenta no tiene los permisos necesarios para acceder a esta sección.
+    </p>
+
+    <a
+      href="{% url 'interfaz:panel' %}"
+      class="btn btn-primary btn-lg"
+    >
+      <i class="bi bi-arrow-left me-1"></i>
+      Volver al panel principal
+    </a>
+  </section>
+</main>
+{% endblock %}

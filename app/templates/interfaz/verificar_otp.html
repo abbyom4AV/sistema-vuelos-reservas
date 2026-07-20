@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+Verificación de seguridad · FlyTrack
+{% endblock %}
+
+{% block contenido %}
+<div class="auth-layout">
+  <aside class="auth-aside">
+    <div class="auth-brand">
+      <span class="brand-mark">
+        <img
+          src="{% static 'img/flytrack-logo.svg' %}"
+          class="brand-logo"
+          alt=""
+        >
+      </span>
+
+      <span class="auth-brand-name">
+        FlyTrack
+        <small>Verificación segura</small>
+      </span>
+    </div>
+
+    <div class="auth-tagline">
+      <strong>
+        Un segundo factor por sesión
+      </strong>
+
+      Protegemos las operaciones sensibles solicitando un código temporal
+      generado exclusivamente para tu inicio de sesión.
+    </div>
+  </aside>
+
+  <main class="auth-main">
+    <section
+      class="auth-card auth-card-otp"
+      aria-labelledby="titulo-otp"
+    >
+      <p class="auth-kicker">
+        Autenticación en dos pasos
+      </p>
+
+      <h1 id="titulo-otp">
+        Verificación de seguridad
+      </h1>
+
+      <p class="auth-subtitle">
+        Ingresa el código de
+        <strong>6 dígitos</strong>
+        generado para completar el inicio de sesión.
+      </p>
+
+      <div
+        id="mensaje-error"
+        class="alert alert-danger mb-3"
+        role="alert"
+        hidden
+      >
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span data-msg></span>
+      </div>
+
+      <form
+        id="form-otp"
+        novalidate
+      >
+        <div class="mb-3">
+          <label
+            for="codigo"
+            class="form-label"
+          >
+            Código de verificación
+          </label>
+
+          <input
+            type="text"
+            id="codigo"
+            name="codigo"
+            class="form-control otp-input"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            maxlength="6"
+            autocomplete="one-time-code"
+            placeholder="······"
+            aria-describedby="otp-timer"
+            required
+          >
+        </div>
+
+        <div
+          id="otp-timer"
+          class="otp-timer mb-3"
+        >
+          <i class="bi bi-clock"></i>
+
+          <span>
+            El código expira en
+            <strong data-timer>05:00</strong>.
+          </span>
+        </div>
+
+        <button
+          type="submit"
+          id="boton-verificar"
+          class="btn btn-primary w-100 justify-content-center"
+        >
+          <span data-label>
+            Verificar código
+          </span>
+
+          <span
+            class="spinner"
+            hidden
+            aria-hidden="true"
+          ></span>
+        </button>
+
+        <button
+          type="button"
+          id="boton-volver"
+          class="btn btn-ghost w-100 mt-2 justify-content-center"
+        >
+          <i class="bi bi-arrow-left"></i>
+          Volver al inicio de sesión
+        </button>
+
+        <div
+          id="codigo-demo"
+          class="otp-demo"
+          hidden
+        >
+          <i class="bi bi-info-circle"></i>
+
+          <span>
+            Modo académico — código de demostración:
+            <strong data-demo>------</strong>
+          </span>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/otp.js' %}"></script>
+{% endblock %}

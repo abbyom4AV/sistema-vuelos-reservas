@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+Iniciar sesión · FlyTrack
+{% endblock %}
+
+{% block contenido %}
+<div class="auth-layout">
+  <aside class="auth-aside">
+    <div class="auth-brand">
+      <span class="brand-mark">
+        <img
+          src="{% static 'img/flytrack-logo.svg' %}"
+          class="brand-logo"
+          alt=""
+        >
+      </span>
+
+      <span class="auth-brand-name">
+        FlyTrack
+        <small>Vuelos y reservas</small>
+      </span>
+    </div>
+
+    <div class="auth-tagline">
+      <span class="auth-kicker">
+        Gestión aérea inteligente
+      </span>
+
+      <strong>
+        Operaciones aéreas centralizadas
+      </strong>
+
+      Administra vuelos, reservas y operaciones desde una plataforma segura,
+      trazable y preparada para cada etapa del viaje.
+
+      <div class="auth-route" aria-hidden="true">
+        <span></span>
+        <i class="bi bi-airplane-fill"></i>
+      </div>
+    </div>
+  </aside>
+
+  <main class="auth-main">
+    <section
+      class="auth-card"
+      aria-labelledby="titulo-login"
+    >
+      <div class="auth-mobile-brand">
+        <span class="brand-mark">
+          <img
+            src="{% static 'img/flytrack-logo.svg' %}"
+            class="brand-logo"
+            alt=""
+          >
+        </span>
+        <span>FlyTrack</span>
+      </div>
+
+      <p class="auth-kicker">
+        Acceso seguro
+      </p>
+
+      <h1 id="titulo-login">
+        Bienvenido de nuevo
+      </h1>
+
+      <p class="auth-subtitle">
+        Ingresa tus credenciales para continuar a tu espacio operativo.
+      </p>
+
+      <div
+        id="mensaje-error"
+        class="alert alert-danger mb-3"
+        role="alert"
+        hidden
+      >
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span data-msg></span>
+      </div>
+
+      <form
+        id="form-login"
+        novalidate
+      >
+        <div class="mb-3">
+          <label
+            for="email"
+            class="form-label"
+          >
+            Correo electrónico
+          </label>
+
+          <div class="auth-input">
+            <i class="bi bi-envelope" aria-hidden="true"></i>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              autocomplete="email"
+              placeholder="nombre@correo.com"
+              maxlength="254"
+              required
+            >
+          </div>
+
+          <div
+            class="field-error"
+            id="error-email"
+            hidden
+          ></div>
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="password"
+            class="form-label"
+          >
+            Contraseña
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-text auth-input-icon">
+              <i class="bi bi-lock" aria-hidden="true"></i>
+            </span>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              autocomplete="current-password"
+              minlength="8"
+              required
+            >
+
+            <button
+              type="button"
+              class="btn btn-icon"
+              id="toggle-password"
+              aria-label="Mostrar contraseña"
+              aria-pressed="false"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+
+          <div
+            class="field-error"
+            id="error-password"
+            hidden
+          ></div>
+        </div>
+
+        <button
+          type="submit"
+          id="boton-login"
+          class="btn btn-primary w-100 justify-content-center"
+        >
+          <span data-label>
+            Continuar
+          </span>
+
+          <span
+            class="spinner"
+            hidden
+            aria-hidden="true"
+          ></span>
+        </button>
+
+        <p class="form-hint text-center mt-3 mb-0">
+          <i class="bi bi-shield-check"></i>
+          Acceso protegido con verificación en dos pasos.
+        </p>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/login.js' %}"></script>
+{% endblock %}

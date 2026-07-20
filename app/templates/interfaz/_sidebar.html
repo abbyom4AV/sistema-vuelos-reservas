@@ -1,0 +1,171 @@
+{# app/templates/interfaz/_sidebar.html #}
+{# panel.js muestra las secciones según el rol ADMINISTRADOR o CLIENTE. #}
+
+<nav class="nav-sidebar" data-rol="">
+  <div
+    class="sidebar-section"
+    data-scope="comun"
+  >
+    <div class="sidebar-label">
+      General
+    </div>
+
+    <a
+      href="{% url 'interfaz:panel' %}"
+      class="sidebar-link {% if request.path == '/panel/' %}active{% endif %}"
+      {% if request.path == '/panel/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-speedometer2"></i>
+      <span>Panel principal</span>
+    </a>
+
+    <a
+      href="/notificaciones/"
+      class="sidebar-link {% if request.path|slice:':16' == '/notificaciones/' %}active{% endif %}"
+      {% if request.path|slice:':16' == '/notificaciones/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-bell"></i>
+      <span>Notificaciones</span>
+    </a>
+  </div>
+
+  <div
+    class="sidebar-section"
+    data-scope="admin"
+    hidden
+  >
+    <div class="sidebar-label">
+      Administración
+    </div>
+
+    <a
+      href="/usuarios/"
+      class="sidebar-link {% if request.path|slice:':10' == '/usuarios/' %}active{% endif %}"
+      {% if request.path|slice:':10' == '/usuarios/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-people"></i>
+      <span>Usuarios</span>
+    </a>
+
+    <a
+      href="/aeronaves/"
+      class="sidebar-link {% if request.path|slice:':11' == '/aeronaves/' %}active{% endif %}"
+      {% if request.path|slice:':11' == '/aeronaves/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-airplane"></i>
+      <span>Aeronaves</span>
+    </a>
+
+    <a
+      href="/rutas/"
+      class="sidebar-link {% if request.path|slice:':7' == '/rutas/' %}active{% endif %}"
+      {% if request.path|slice:':7' == '/rutas/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-signpost-split"></i>
+      <span>Rutas</span>
+    </a>
+
+    <a
+      href="/vuelos/"
+      class="sidebar-link {% if request.path|slice:':8' == '/vuelos/' %}active{% endif %}"
+      {% if request.path|slice:':8' == '/vuelos/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-send"></i>
+      <span>Vuelos</span>
+    </a>
+
+    <a
+      href="/reservas/"
+      class="sidebar-link {% if request.path|slice:':10' == '/reservas/' %}active{% endif %}"
+      {% if request.path|slice:':10' == '/reservas/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-journal-check"></i>
+      <span>Reservas</span>
+    </a>
+
+    <a
+      href="/bitacora/"
+      class="sidebar-link {% if request.path|slice:':10' == '/bitacora/' %}active{% endif %}"
+      {% if request.path|slice:':10' == '/bitacora/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-clock-history"></i>
+      <span>Bitácora</span>
+    </a>
+
+    <a
+      href="/reportes/"
+      class="sidebar-link {% if request.path|slice:':10' == '/reportes/' %}active{% endif %}"
+      {% if request.path|slice:':10' == '/reportes/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-bar-chart"></i>
+      <span>Reportes</span>
+    </a>
+  </div>
+
+  <div
+    class="sidebar-section"
+    data-scope="cliente"
+    hidden
+  >
+    <div class="sidebar-label">
+      Reservas
+    </div>
+
+    <a
+      href="/buscar-vuelos/"
+      class="sidebar-link {% if request.path|slice:':15' == '/buscar-vuelos/' %}active{% endif %}"
+      {% if request.path|slice:':15' == '/buscar-vuelos/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-search"></i>
+      <span>Buscar vuelos</span>
+    </a>
+
+    <a
+      href="/mis-reservas/"
+      class="sidebar-link {% if request.path|slice:':14' == '/mis-reservas/' %}active{% endif %}"
+      {% if request.path|slice:':14' == '/mis-reservas/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-journal-bookmark"></i>
+      <span>Mis reservas</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">
+      Cuenta
+    </div>
+
+    <a
+      href="/cambiar-contrasena/"
+      class="sidebar-link {% if request.path|slice:':20' == '/cambiar-contrasena/' %}active{% endif %}"
+      {% if request.path|slice:':20' == '/cambiar-contrasena/' %}
+        aria-current="page"
+      {% endif %}
+    >
+      <i class="bi bi-gear"></i>
+      <span>Configuración</span>
+    </a>
+  </div>
+</nav>

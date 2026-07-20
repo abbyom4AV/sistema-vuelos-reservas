@@ -1,0 +1,349 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Bitácora · FlyTrack
+{% endblock %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span>
+    Administración
+  </span>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Bitácora
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+<div class="page-header">
+  <div>
+    <h1>
+      Bitácora del sistema
+    </h1>
+
+    <p>
+      Registro auditable de las acciones ejecutadas por los usuarios.
+    </p>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-toolbar">
+    <div
+      class="input-group input-group-sm"
+      style="max-width: 230px;"
+    >
+      <span class="input-group-text bg-white">
+        <i class="bi bi-search"></i>
+      </span>
+
+      <input
+        type="search"
+        class="form-control"
+        id="bit-buscar"
+        placeholder="Buscar en la bitácora"
+        autocomplete="off"
+        aria-label="Buscar eventos"
+      >
+    </div>
+
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      id="bit-usuario"
+      placeholder="Usuario o correo"
+      autocomplete="off"
+      aria-label="Filtrar por usuario"
+      style="max-width: 180px;"
+    >
+
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      id="bit-accion"
+      placeholder="Acción"
+      autocomplete="off"
+      aria-label="Filtrar por acción"
+      style="max-width: 170px;"
+    >
+
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      id="bit-entidad"
+      placeholder="Entidad"
+      autocomplete="off"
+      aria-label="Filtrar por entidad"
+      style="max-width: 150px;"
+    >
+
+    <select
+      class="form-select form-select-sm"
+      id="bit-resultado"
+      style="max-width: 145px;"
+      aria-label="Filtrar por resultado"
+    >
+      <option value="">
+        Resultado
+      </option>
+
+      <option value="EXITO">
+        Éxito
+      </option>
+
+      <option value="ERROR">
+        Error
+      </option>
+
+      <option value="DENEGADO">
+        Denegado
+      </option>
+    </select>
+
+    <select
+      class="form-select form-select-sm"
+      id="bit-metodo"
+      style="max-width: 125px;"
+      aria-label="Filtrar por método HTTP"
+    >
+      <option value="">
+        Método
+      </option>
+
+      <option value="GET">
+        GET
+      </option>
+
+      <option value="POST">
+        POST
+      </option>
+
+      <option value="PUT">
+        PUT
+      </option>
+
+      <option value="PATCH">
+        PATCH
+      </option>
+
+      <option value="DELETE">
+        DELETE
+      </option>
+    </select>
+
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      id="bit-desde"
+      style="max-width: 155px;"
+      aria-label="Fecha inicial"
+      title="Fecha inicial"
+    >
+
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      id="bit-hasta"
+      style="max-width: 155px;"
+      aria-label="Fecha final"
+      title="Fecha final"
+    >
+
+    <button
+      type="button"
+      class="btn btn-outline-primary btn-sm ms-auto"
+      id="bit-refrescar"
+    >
+      <i class="bi bi-arrow-clockwise"></i>
+
+      <span data-label>
+        Actualizar
+      </span>
+
+      <span
+        class="spinner"
+        hidden
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
+
+  <div
+    id="bit-mensaje-error"
+    class="alert alert-danger m-3"
+    role="alert"
+    hidden
+  >
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span data-msg></span>
+  </div>
+
+  <div class="table-responsive">
+    <table
+      class="table"
+      id="tabla-bitacora"
+    >
+      <thead>
+        <tr>
+          <th scope="col">
+            Fecha y hora
+          </th>
+
+          <th scope="col">
+            Usuario
+          </th>
+
+          <th scope="col">
+            Acción
+          </th>
+
+          <th scope="col">
+            Entidad
+          </th>
+
+          <th scope="col">
+            Resultado
+          </th>
+
+          <th scope="col">
+            Método
+          </th>
+
+          <th scope="col">
+            Endpoint
+          </th>
+
+          <th scope="col">
+            Dirección IP
+          </th>
+
+          <th
+            scope="col"
+            class="text-end"
+          >
+            Detalle
+          </th>
+        </tr>
+      </thead>
+
+      <tbody id="bit-tbody">
+        {% for i in "12345" %}
+        <tr>
+          <td colspan="9">
+            <span
+              class="skeleton skeleton-line"
+              style="width: 100%; height: 14px;"
+            ></span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer">
+    <span id="bit-contador">
+      —
+    </span>
+
+    <div class="d-flex gap-1">
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm"
+        id="bit-prev"
+        aria-label="Página anterior"
+        disabled
+      >
+        <i class="bi bi-chevron-left"></i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm"
+        id="bit-next"
+        aria-label="Página siguiente"
+        disabled
+      >
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalBitacora"
+  tabindex="-1"
+  aria-labelledby="modalBitacoraTitulo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="modalBitacoraTitulo"
+        >
+          Detalle del evento
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <div
+        class="modal-body"
+        id="bit-detalle-body"
+      >
+        <div class        <i class="bi bi-chevron-right"></i>
+      </button>
+="text-center text-subtle py-4">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+
+          <span class="ms-2">
+            Cargando…
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-ghost"
+          data-bs-dismiss="modal"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block panel_js %}
+<script src="{% static 'js/bitacora.js' %}"></script>
+{% endblock %}

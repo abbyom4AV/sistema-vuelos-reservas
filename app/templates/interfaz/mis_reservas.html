@@ -1,0 +1,75 @@
+{% extends "base_auth.html" %}
+
+{% block titulo %}
+Mis reservas · FlyTrack
+{% endblock %}
+
+{% block rol_requerido %}CLIENTE{% endblock %}
+
+{% block breadcrumbs %}
+<nav class="app-crumbs" aria-label="breadcrumb">
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Mis reservas
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+<div class="page-header">
+  <div>
+    <p class="travel-eyebrow">
+      Tus viajes
+    </p>
+
+    <h1>
+      Mis reservas
+    </h1>
+
+    <p>
+      Consulta el estado de tus próximos vuelos y pagos asociados.
+    </p>
+  </div>
+
+  <a
+    href="{% url 'interfaz:buscar-vuelos' %}"
+    class="btn btn-primary"
+  >
+    <i class="bi bi-search"></i>
+    Buscar vuelos
+  </a>
+</div>
+
+<section class="travel-empty-reservations">
+  <div class="travel-empty-icon">
+    <i class="bi bi-ticket-perforated"></i>
+  </div>
+
+  <span class="travel-status">
+    <i class="bi bi-clock-history"></i>
+    Próximamente
+  </span>
+
+  <h2>
+    Aquí verás tus próximos viajes
+  </h2>
+
+  <p>
+    Cuando la compra de vuelos esté disponible, podrás consultar detalles,
+    estados de pago y documentos de cada reserva.
+  </p>
+
+  <a
+    href="{% url 'interfaz:buscar-vuelos' %}"
+    class="btn btn-outline-primary"
+  >
+    Conocer la búsqueda de vuelos
+    <i class="bi bi-arrow-right"></i>
+  </a>
+</section>
+{% endblock %}
