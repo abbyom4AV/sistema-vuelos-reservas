@@ -252,6 +252,26 @@
           nav.dataset.rol = rol;
         });
   
+      const panelCliente =
+        document.getElementById(
+          "panel-cliente"
+        );
+
+      if (panelCliente) {
+        panelCliente.hidden =
+          rol !== "CLIENTE";
+      }
+
+      const panelAdministrador =
+        document.getElementById(
+          "panel-administrador"
+        );
+
+      if (panelAdministrador) {
+        panelAdministrador.hidden =
+          rol !== "ADMINISTRADOR";
+      }
+
       const accionesAdministrador =
         document.getElementById(
           "acciones-administrador"
@@ -428,6 +448,7 @@
   
     async function cargarDashboard() {
       if (
+        rol !== "ADMINISTRADOR" ||
         !document.getElementById(
           "tarjetas-kpi"
         )

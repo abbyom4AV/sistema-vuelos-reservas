@@ -1,16 +1,25 @@
 from django.db.models import Q
 from django.utils.dateparse import parse_date
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from usuarios.permissions import EsAdministrador
+from config.api_mixins import EnvelopeReadOnlyViewSetMixin
 
 from .models import Bitacora
 from .serializers import BitacoraSerializer
 
 
-class BitacoraViewSet(ReadOnlyModelViewSet):
+@extend_schema_view(
+    list=extend_schema(tags=["Bitácora"]),
+    retrieve=extend_schema(tags=["Bitácora"]),
+)
+class BitacoraViewSet(
+    EnvelopeReadOnlyViewSetMixin,
+    ReadOnlyModelViewSet,
+):
     serializer_class = BitacoraSerializer
     permission_classes = [
         IsAuthenticated,

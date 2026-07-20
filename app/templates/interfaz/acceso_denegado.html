@@ -1,37 +1,26 @@
 {% extends "base.html" %}
 
 {% block titulo %}
-Acceso denegado · Sistema de Gestión de Vuelos
+Acceso denegado · FlyTrack
 {% endblock %}
 
 {% block contenido %}
 <main
-  class="min-vh-100 d-flex align-items-center justify-content-center p-4"
-  style="background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);"
+  class="access-denied-page min-vh-100 d-flex align-items-center justify-content-center p-4"
 >
   <section
-    class="text-center"
-    style="max-width: 640px;"
+    class="access-denied-content text-center"
     aria-labelledby="titulo-acceso-denegado"
   >
     <div
-      class="d-inline-flex align-items-center justify-content-center mb-4"
-      style="
-        width: 112px;
-        height: 112px;
-        border-radius: 50%;
-        color: #b42318;
-        background: #fee4e2;
-        font-size: 3.5rem;
-      "
+      class="access-denied-icon d-inline-flex align-items-center justify-content-center mb-4"
       aria-hidden="true"
     >
       <i class="bi bi-shield-lock-fill"></i>
     </div>
 
     <p
-      class="mb-2 text-uppercase fw-semibold"
-      style="color: #b42318; letter-spacing: 0.12em;"
+      class="access-denied-code mb-2 text-uppercase fw-semibold"
     >
       Error 403
     </p>

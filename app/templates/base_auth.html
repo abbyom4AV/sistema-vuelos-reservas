@@ -25,11 +25,18 @@
       href="{% url 'interfaz:panel' %}"
     >
       <span class="brand-mark">
-        <i class="bi bi-airplane-fill"></i>
+        <img
+          src="{% static 'img/flytrack-logo.svg' %}"
+          class="brand-logo"
+          alt=""
+        >
       </span>
 
       <span>
-        Vuelos&nbsp;·&nbsp;Panel operativo
+        FlyTrack
+        <small class="navbar-brand-subtitle">
+          Vuelos y reservas
+        </small>
       </span>
     </a>
 
@@ -192,7 +199,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/panel.js' %}?v=2"></script>
+<script src="{% static 'js/panel.js' %}?v=3"></script>
 
 {% block panel_js %}
 {% endblock %}

@@ -5,8 +5,10 @@ from django.urls import path
 from .views import (
     acceso_denegado_view,
     bitacora_view,
+    buscar_vuelos_view,
     cambiar_contrasena_view,
     login_view,
+    mis_reservas_view,
     notificaciones_view,
     panel_view,
     usuarios_view,
@@ -32,6 +34,16 @@ urlpatterns = [
         "panel/",
         panel_view,
         name="panel",
+    ),
+    path(
+        "buscar-vuelos/",
+        buscar_vuelos_view,
+        name="buscar-vuelos",
+    ),
+    path(
+        "mis-reservas/",
+        mis_reservas_view,
+        name="mis-reservas",
     ),
     path(
         "usuarios/",

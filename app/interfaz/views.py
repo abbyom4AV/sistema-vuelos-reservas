@@ -24,6 +24,20 @@ def panel_view(request):
     )
 
 
+def buscar_vuelos_view(request):
+    return render(
+        request,
+        "interfaz/buscar_vuelos.html",
+    )
+
+
+def mis_reservas_view(request):
+    return render(
+        request,
+        "interfaz/mis_reservas.html",
+    )
+
+
 def usuarios_view(request):
     return render(
         request,

@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -9,12 +9,20 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from auditoria.models import Bitacora
 from auditoria.services import registrar_evento
+from config.api_mixins import EnvelopeReadOnlyViewSetMixin
 
 from .models import Notificacion
 from .serializers import NotificacionSerializer
 
 
-class NotificacionViewSet(ReadOnlyModelViewSet):
+@extend_schema_view(
+    list=extend_schema(tags=["Notificaciones"]),
+    retrieve=extend_schema(tags=["Notificaciones"]),
+)
+class NotificacionViewSet(
+    EnvelopeReadOnlyViewSetMixin,
+    ReadOnlyModelViewSet,
+):
     serializer_class = NotificacionSerializer
     permission_classes = [IsAuthenticated]
 

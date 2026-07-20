@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-Verificación de seguridad · Sistema de Gestión de Vuelos
+Verificación de seguridad · FlyTrack
 {% endblock %}
 
 {% block contenido %}
@@ -10,11 +10,16 @@ Verificación de seguridad · Sistema de Gestión de Vuelos
   <aside class="auth-aside">
     <div class="auth-brand">
       <span class="brand-mark">
-        <i class="bi bi-shield-lock-fill"></i>
+        <img
+          src="{% static 'img/flytrack-logo.svg' %}"
+          class="brand-logo"
+          alt=""
+        >
       </span>
 
-      <span>
-        Verificación en dos pasos
+      <span class="auth-brand-name">
+        FlyTrack
+        <small>Verificación segura</small>
       </span>
     </div>
 
@@ -30,9 +35,13 @@ Verificación de seguridad · Sistema de Gestión de Vuelos
 
   <main class="auth-main">
     <section
-      class="auth-card"
+      class="auth-card auth-card-otp"
       aria-labelledby="titulo-otp"
     >
+      <p class="auth-kicker">
+        Autenticación en dos pasos
+      </p>
+
       <h1 id="titulo-otp">
         Verificación de seguridad
       </h1>

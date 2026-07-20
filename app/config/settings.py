@@ -192,6 +192,9 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": (
         "drf_spectacular.openapi.AutoSchema"
     ),
+    "EXCEPTION_HANDLER": (
+        "config.api_responses.manejador_excepciones"
+    ),
 }
 
 SPECTACULAR_SETTINGS = {

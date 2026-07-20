@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from auditoria.models import Bitacora
 from auditoria.services import registrar_evento
@@ -96,6 +97,7 @@ class LoginView(APIView):
                         "El correo o la contraseña "
                         "son incorrectos."
                     ),
+                    "errorCode": "CREDENCIALES_INVALIDAS",
                     "errors": {
                         "credenciales": [
                             "No fue posible validar "
@@ -123,6 +125,7 @@ class LoginView(APIView):
                     "message": (
                         "La cuenta se encuentra inactiva."
                     ),
+                    "errorCode": "USUARIO_INACTIVO",
                     "errors": {
                         "usuario": [
                             "Contacte al administrador "
@@ -178,6 +181,14 @@ class LoginView(APIView):
             respuesta,
             status=status.HTTP_200_OK,
         )
+
+
+class RefreshJWTView(TokenRefreshView):
+    """Mantiene el refresh de Simple JWT con documentación uniforme."""
+
+    @extend_schema(tags=["Autenticación"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 
 class VerificarOTPView(APIView):
@@ -241,6 +252,7 @@ class VerificarOTPView(APIView):
                     "message": (
                         "El identificador OTP ha expirado."
                     ),
+                    "errorCode": "OTP_EXPIRADO",
                     "errors": {
                         "otp_token": [
                             "Debe iniciar nuevamente "
@@ -268,6 +280,7 @@ class VerificarOTPView(APIView):
                     "message": (
                         "El identificador OTP no es válido."
                     ),
+                    "errorCode": "TOKEN_INVALIDO",
                     "errors": {
                         "otp_token": [
                             "El valor fue alterado "
@@ -300,6 +313,7 @@ class VerificarOTPView(APIView):
                 {
                     "success": False,
                     "message": "El usuario no existe.",
+                    "errorCode": "TOKEN_INVALIDO",
                     "errors": {},
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -322,6 +336,7 @@ class VerificarOTPView(APIView):
                     "message": (
                         "La cuenta se encuentra inactiva."
                     ),
+                    "errorCode": "USUARIO_INACTIVO",
                     "errors": {},
                 },
                 status=status.HTTP_403_FORBIDDEN,
@@ -347,6 +362,11 @@ class VerificarOTPView(APIView):
                 {
                     "success": False,
                     "message": error.mensaje,
+                    "errorCode": (
+                        "OTP_EXPIRADO"
+                        if error.codigo_error == "otp_expirado"
+                        else "OTP_INVALIDO"
+                    ),
                     "errors": {
                         "codigo": [
                             error.codigo_error,
@@ -529,6 +549,9 @@ class CambiarContrasenaView(APIView):
                     "success": False,
                     "message": (
                         "La contraseña actual es incorrecta."
+                    ),
+                    "errorCode": (
+                        "CONTRASENA_ACTUAL_INCORRECTA"
                     ),
                     "errors": {
                         "password_actual": [

@@ -1,10 +1,9 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenRefreshView
-
 from .views import (
     CambiarContrasenaView,
     LoginView,
     LogoutView,
+    RefreshJWTView,
     VerificarOTPView,
 )
 
@@ -24,7 +23,7 @@ urlpatterns = [
     ),
     path(
         "refresh/",
-        TokenRefreshView.as_view(),
+        RefreshJWTView.as_view(),
         name="refresh",
     ),
     path(

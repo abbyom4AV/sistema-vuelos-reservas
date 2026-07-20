@@ -1,0 +1,93 @@
+{
+  "info": {
+    "name": "FlyTrack - Integrante 1 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:8000"},
+    {"key": "access_token", "value": ""},
+    {"key": "refresh_token", "value": ""},
+    {"key": "otp_token", "value": ""},
+    {"key": "usuario_id", "value": ""},
+    {"key": "notificacion_id", "value": ""},
+    {"key": "bitacora_id", "value": ""}
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"email\":\"usuario@ejemplo.local\",\"password\":\"<contraseña>\"}"},
+            "url": "{{base_url}}/api/auth/login/"
+          }
+        },
+        {
+          "name": "Verificar OTP",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"otp_token\":\"{{otp_token}}\",\"codigo\":\"000000\"}"},
+            "url": "{{base_url}}/api/auth/verificar-otp/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{base_url}}/api/usuarios/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cambio de contraseña",
+      "item": [
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"password_actual\":\"<actual>\",\"nueva_password\":\"<nueva>\",\"confirmar_password\":\"<nueva>\"}"},
+            "url": "{{base_url}}/api/auth/cambiar-contrasena/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bitácora",
+      "item": [
+        {
+          "name": "Listar bitácora",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{base_url}}/api/bitacora/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "Listar notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}],
+            "url": "{{base_url}}/api/notificaciones/"
+          }
+        }
+      ]
+    }
+  ]
+}

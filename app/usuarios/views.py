@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.db.models import Q
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -12,6 +12,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from auditoria.models import Bitacora
 from auditoria.services import registrar_evento
+from config.api_mixins import EnvelopeModelViewSetMixin
+from notificaciones.models import Notificacion
+from notificaciones.services import crear_notificacion
 
 from .models import Usuario
 from .permissions import EsAdministrador
@@ -47,7 +50,17 @@ class PerfilView(APIView):
         )
 
 
-class UsuarioViewSet(ModelViewSet):
+@extend_schema_view(
+    list=extend_schema(tags=["Usuarios"]),
+    retrieve=extend_schema(tags=["Usuarios"]),
+    create=extend_schema(tags=["Usuarios"]),
+    update=extend_schema(tags=["Usuarios"]),
+    partial_update=extend_schema(tags=["Usuarios"]),
+)
+class UsuarioViewSet(
+    EnvelopeModelViewSetMixin,
+    ModelViewSet,
+):
     queryset = (
         Usuario.objects
         .select_related("rol")
@@ -138,6 +151,14 @@ class UsuarioViewSet(ModelViewSet):
                 f"Se creó la cuenta {usuario.email}."
             ),
         )
+        crear_notificacion(
+            usuario=usuario,
+            tipo=Notificacion.Tipo.SISTEMA,
+            titulo="Cuenta creada",
+            mensaje=(
+                "Su cuenta fue creada por un administrador."
+            ),
+        )
 
     @transaction.atomic
     def perform_update(self, serializer):
@@ -172,6 +193,7 @@ class UsuarioViewSet(ModelViewSet):
             ),
         )
 
+    @extend_schema(tags=["Usuarios"])
     @action(
         detail=True,
         methods=["patch"],
@@ -186,6 +208,20 @@ class UsuarioViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         nuevo_estado = serializer.validated_data["activo"]
+
+        if usuario.is_active == nuevo_estado:
+            return Response(
+                {
+                    "success": True,
+                    "message": (
+                        "El usuario ya tenía el estado solicitado."
+                    ),
+                    "data": UsuarioLecturaSerializer(
+                        usuario
+                    ).data,
+                },
+                status=status.HTTP_200_OK,
+            )
 
         if (
             usuario.pk == request.user.pk
@@ -238,6 +274,23 @@ class UsuarioViewSet(ModelViewSet):
                 detalle=(
                     f"Estado de {usuario.email}: "
                     f"{'activo' if nuevo_estado else 'inactivo'}."
+                ),
+            )
+            crear_notificacion(
+                usuario=usuario,
+                tipo=Notificacion.Tipo.SISTEMA,
+                titulo=(
+                    "Cuenta activada"
+                    if nuevo_estado
+                    else "Cuenta desactivada"
+                ),
+                mensaje=(
+                    "Su cuenta fue activada por un administrador."
+                    if nuevo_estado
+                    else (
+                        "Su cuenta fue desactivada por un "
+                        "administrador."
+                    )
                 ),
             )
 

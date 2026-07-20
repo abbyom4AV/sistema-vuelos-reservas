@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-Panel principal · Sistema de Gestión de Vuelos
+Panel principal · FlyTrack
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -23,6 +23,69 @@ Panel principal · Sistema de Gestión de Vuelos
 {% endblock %}
 
 {% block panel %}
+<section id="panel-cliente" hidden>
+  <section class="travel-hero travel-hero-dashboard">
+    <div class="travel-hero-content">
+      <p class="travel-eyebrow">
+        Bienvenida a FlyTrack
+      </p>
+
+      <h1>
+        Tu próximo viaje empieza aquí
+      </h1>
+
+      <p>
+        Busca vuelos, revisa tus reservas y mantente al día con cada detalle de tu viaje.
+      </p>
+
+      <div class="d-flex flex-wrap gap-2 mt-4">
+        <a
+          href="{% url 'interfaz:buscar-vuelos' %}"
+          class="btn btn-accent"
+        >
+          <i class="bi bi-search"></i>
+          Buscar vuelos
+        </a>
+
+        <a
+          href="{% url 'interfaz:mis-reservas' %}"
+          class="btn btn-light"
+        >
+          Mis reservas
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="row g-3">
+    <div class="col-12 col-md-6">
+      <article class="travel-feature h-100">
+        <i class="bi bi-compass"></i>
+        <h2>Explora nuevos destinos</h2>
+        <p>Prepara tu próxima búsqueda y conoce las rutas disponibles.</p>
+        <a href="{% url 'interfaz:buscar-vuelos' %}">
+          Ir a buscar vuelos
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </article>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <article class="travel-feature h-100">
+        <i class="bi bi-suitcase2"></i>
+        <h2>Gestiona tus viajes</h2>
+        <p>Encuentra aquí la información de todas tus reservas.</p>
+        <a href="{% url 'interfaz:mis-reservas' %}">
+          Ver mis reservas
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </article>
+    </div>
+  </section>
+</section>
+
+<div id="panel-administrador" hidden>
 <div class="page-header">
   <div>
     <h1>
@@ -332,4 +395,5 @@ Panel principal · Sistema de Gestión de Vuelos
     </div>
   </div>
 </div>
+ </div>
 {% endblock %}
