@@ -23,6 +23,15 @@ urlpatterns = [
 ),
 
     path(
+        "api/notificaciones/",
+        include("notificaciones.urls"),
+    ),
+    path(
+        "api/bitacora/",
+        include("auditoria.urls"),
+    ),
+
+    path(
         "api/schema/",
         SpectacularAPIView.as_view(),
         name="schema",
@@ -34,4 +43,9 @@ urlpatterns = [
         ),
         name="swagger-ui",
     ),
+    
+    path(
+    "",
+    include("interfaz.urls"),
+),
 ]

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Verificar código OTP
+{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="card auth-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="h3 text-center mb-2">
+                Segundo factor
+            </h1>
+
+            <p class="text-muted text-center mb-4">
+                Ingrese el código temporal de seis dígitos.
+            </p>
+
+            <div
+                id="codigo-demo"
+                class="alert alert-info d-none"
+            ></div>
+
+            <div
+                id="mensaje-error"
+                class="alert alert-danger d-none"
+                role="alert"
+            ></div>
+
+            <form id="form-otp">
+                <div class="mb-4">
+                    <label
+                        for="codigo"
+                        class="form-label"
+                    >
+                        Código OTP
+                    </label>
+
+                    <input
+                        type="text"
+                        id="codigo"
+                        class="form-control text-center otp-input"
+                        inputmode="numeric"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    id="boton-verificar"
+                    class="btn btn-primary w-100"
+                >
+                    Verificar código
+                </button>
+
+                <a
+                    href="/"
+                    class="btn btn-link w-100 mt-2"
+                >
+                    Volver al inicio de sesión
+                </a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/otp.js' %}"></script>
+{% endblock %}

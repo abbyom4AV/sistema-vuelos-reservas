@@ -1,0 +1,38 @@
+body {
+    min-height: 100vh;
+    background-color: #f4f6f9;
+}
+
+.auth-container {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    border: 0;
+    border-radius: 1rem;
+}
+
+.form-control {
+    min-height: 46px;
+}
+
+.otp-input {
+    font-size: 1.7rem;
+    letter-spacing: 0.7rem;
+    font-weight: 600;
+}
+
+.card {
+    border: 0;
+    border-radius: 0.9rem;
+}
+
+.navbar-brand {
+    font-weight: 600;
+}

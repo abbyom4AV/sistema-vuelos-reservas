@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Iniciar sesión
+{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="card auth-card shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="h3 text-center mb-2">
+                Iniciar sesión
+            </h1>
+
+            <p class="text-muted text-center mb-4">
+                Ingrese sus credenciales para acceder al sistema.
+            </p>
+
+            <div
+                id="mensaje-error"
+                class="alert alert-danger d-none"
+                role="alert"
+            ></div>
+
+            <form id="form-login">
+                <div class="mb-3">
+                    <label
+                        for="email"
+                        class="form-label"
+                    >
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label
+                        for="password"
+                        class="form-label"
+                    >
+                        Contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    id="boton-login"
+                    class="btn btn-primary w-100"
+                >
+                    Continuar
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/login.js' %}"></script>
+{% endblock %}
