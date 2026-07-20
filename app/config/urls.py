@@ -16,6 +16,12 @@ urlpatterns = [
         "api/auth/",
         include("autenticacion.urls"),
     ),
+    
+    path(
+    "api/usuarios/",
+    include("usuarios.urls"),
+),
+
     path(
         "api/schema/",
         SpectacularAPIView.as_view(),
