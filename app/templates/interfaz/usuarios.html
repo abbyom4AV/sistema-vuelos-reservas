@@ -1,0 +1,578 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Usuarios · Sistema de Gestión de Vuelos
+{% endblock %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span>
+    Administración
+  </span>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Usuarios
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+<div class="page-header">
+  <div>
+    <h1>
+      Gestión de usuarios
+    </h1>
+
+    <p>
+      Administra las cuentas del sistema, sus roles y estado operativo.
+    </p>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-primary"
+      id="boton-crear-usuario"
+      data-bs-toggle="modal"
+      data-bs-target="#modalUsuario"
+      data-modo="crear"
+    >
+      <i class="bi bi-person-plus"></i>
+      Crear usuario
+    </button>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-toolbar">
+    <div
+      class="input-group input-group-sm"
+      style="max-width: 280px;"
+    >
+      <span class="input-group-text bg-white">
+        <i class="bi bi-search"></i>
+      </span>
+
+      <input
+        type="search"
+        class="form-control"
+        id="usr-buscar"
+        placeholder="Buscar por nombre o correo"
+        autocomplete="off"
+        aria-label="Buscar usuarios"
+      >
+    </div>
+
+    <select
+      class="form-select form-select-sm"
+      id="usr-filtro-rol"
+      style="max-width: 180px;"
+      aria-label="Filtrar por rol"
+    >
+      <option value="">
+        Todos los roles
+      </option>
+
+      <option value="ADMINISTRADOR">
+        Administrador
+      </option>
+
+      <option value="CLIENTE">
+        Cliente
+      </option>
+    </select>
+
+    <select
+      class="form-select form-select-sm"
+      id="usr-filtro-estado"
+      style="max-width: 170px;"
+      aria-label="Filtrar por estado"
+    >
+      <option value="">
+        Todos los estados
+      </option>
+
+      <option value="true">
+        Activo
+      </option>
+
+      <option value="false">
+        Inactivo
+      </option>
+    </select>
+
+    <button
+      type="button"
+      class="btn btn-outline-primary btn-sm ms-auto"
+      id="usr-refrescar"
+    >
+      <i class="bi bi-arrow-clockwise"></i>
+      Actualizar
+    </button>
+  </div>
+
+  <div
+    id="usr-mensaje-error"
+    class="alert alert-danger m-3"
+    role="alert"
+    hidden
+  >
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span data-msg></span>
+  </div>
+
+  <div class="table-responsive">
+    <table
+      class="table"
+      id="tabla-usuarios"
+    >
+      <thead>
+        <tr>
+          <th scope="col">
+            Nombre
+          </th>
+
+          <th scope="col">
+            Correo
+          </th>
+
+          <th scope="col">
+            Usuario
+          </th>
+
+          <th scope="col">
+            Rol
+          </th>
+
+          <th scope="col">
+            Estado
+          </th>
+
+          <th scope="col">
+            Fecha de registro
+          </th>
+
+          <th
+            scope="col"
+            class="text-end"
+          >
+            Acciones
+          </th>
+        </tr>
+      </thead>
+
+      <tbody id="usr-tbody">
+        {% for i in "12345" %}
+        <tr>
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 70%;"
+            ></span>
+          </td>
+
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 80%;"
+            ></span>
+          </td>
+
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 50%;"
+            ></span>
+          </td>
+
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 60%;"
+            ></span>
+          </td>
+
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 50%;"
+            ></span>
+          </td>
+
+          <td>
+            <span
+              class="skeleton skeleton-line"
+              style="width: 60%;"
+            ></span>
+          </td>
+
+          <td class="text-end">
+            <span
+              class="skeleton skeleton-line"
+              style="width: 40%;"
+            ></span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer">
+    <span id="usr-contador">
+      —
+    </span>
+
+    <div class="d-flex gap-1">
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm"
+        id="usr-prev"
+        aria-label="Página anterior"
+        disabled
+      >
+        <i class="bi bi-chevron-left"></i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm"
+        id="usr-next"
+        aria-label="Página siguiente"
+        disabled
+      >
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalUsuario"
+  tabindex="-1"
+  aria-labelledby="modalUsuarioTitulo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form
+        id="form-usuario"
+        novalidate
+      >
+        <div class="modal-header">
+          <h5
+            class="modal-title"
+            id="modalUsuarioTitulo"
+          >
+            Crear usuario
+          </h5>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+
+        <div class="modal-body">
+          <input
+            type="hidden"
+            name="id"
+            id="usuario-id"
+          >
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label
+                for="usuario-first-name"
+                class="form-label"
+              >
+                Nombre
+              </label>
+
+              <input
+                type="text"
+                name="first_name"
+                id="usuario-first-name"
+                class="form-control"
+                maxlength="150"
+                autocomplete="given-name"
+                required
+              >
+
+              <div
+                class="field-error"
+                data-error="first_name"
+                hidden
+              ></div>
+            </div>
+
+            <div class="col-md-6">
+              <label
+                for="usuario-last-name"
+                class="form-label"
+              >
+                Apellido
+              </label>
+
+              <input
+                type="text"
+                name="last_name"
+                id="usuario-last-name"
+                class="form-control"
+                maxlength="150"
+                autocomplete="family-name"
+                required
+              >
+
+              <div
+                class="field-error"
+                data-error="last_name"
+                hidden
+              ></div>
+            </div>
+
+            <div class="col-md-6">
+              <label
+                for="usuario-email"
+                class="form-label"
+              >
+                Correo electrónico
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                id="usuario-email"
+                class="form-control"
+                maxlength="254"
+                autocomplete="email"
+                required
+              >
+
+              <div
+                class="field-error"
+                data-error="email"
+                hidden
+              ></div>
+            </div>
+
+            <div class="col-md-6">
+              <label
+                for="usuario-username"
+                class="form-label"
+              >
+                Nombre de usuario
+              </label>
+
+              <input
+                type="text"
+                name="username"
+                id="usuario-username"
+                class="form-control"
+                maxlength="150"
+                autocomplete="username"
+                required
+              >
+
+              <div
+                class="field-error"
+                data-error="username"
+                hidden
+              ></div>
+            </div>
+
+            <div class="col-md-6">
+              <label
+                for="usuario-rol"
+                class="form-label"
+              >
+                Rol
+              </label>
+
+              <select
+                name="rol_id"
+                id="usuario-rol"
+                class="form-select"
+                required
+              >
+                <option
+                  value=""
+                  selected
+                  disabled
+                >
+                  Seleccione un rol
+                </option>
+
+                <option value="2">
+                  Cliente
+                </option>
+
+                <option value="1">
+                  Administrador
+                </option>
+              </select>
+
+              <div
+                class="field-error"
+                data-error="rol_id"
+                hidden
+              ></div>
+            </div>
+
+            <div
+              class="col-md-6"
+              data-solo-crear
+            >
+              <label
+                for="usuario-password"
+                class="form-label"
+              >
+                Contraseña inicial
+              </label>
+
+              <input
+                type="password"
+                name="password"
+                id="usuario-password"
+                class="form-control"
+                minlength="8"
+                autocomplete="new-password"
+              >
+
+              <div class="form-hint">
+                Debe contener al menos 8 caracteres.
+              </div>
+
+              <div
+                class="field-error"
+                data-error="password"
+                hidden
+              ></div>
+            </div>
+          </div>
+
+          <div
+            class="alert alert-danger mt-3"
+            id="form-usuario-error"
+            role="alert"
+            hidden
+          >
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span data-msg></span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-ghost"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="form-usuario-guardar"
+          >
+            <span data-label>
+              Guardar
+            </span>
+
+            <span
+              class="spinner"
+              hidden
+              aria-hidden="true"
+            ></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalConfirmarEstado"
+  tabindex="-1"
+  aria-labelledby="modalConfirmarEstadoTitulo"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="modalConfirmarEstadoTitulo"
+        >
+          Confirmar acción
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <p
+          class="mb-0"
+          id="confirmar-estado-msg"
+        >
+          ¿Está seguro de realizar esta acción?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-ghost"
+          data-bs-dismiss="modal"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="confirmar-estado-ok"
+        >
+          <span data-label>
+            Confirmar
+          </span>
+
+          <span
+            class="spinner"
+            hidden
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block panel_js %}
+<script src="{% static 'js/usuarios.js' %}?v=2"></script>
+{% endblock %}

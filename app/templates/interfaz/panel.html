@@ -1,143 +1,335 @@
-{% extends "base.html" %}
+{% extends "base_auth.html" %}
 {% load static %}
 
-{% block title %}
+{% block titulo %}
+Panel principal · Sistema de Gestión de Vuelos
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
     Panel principal
+  </span>
+</nav>
 {% endblock %}
 
-{% block content %}
-<section class="container py-5">
-    <div
-        class="d-flex flex-column flex-md-row
-               justify-content-between align-items-md-center
-               gap-3 mb-4"
+{% block panel %}
+<div class="page-header">
+  <div>
+    <h1>
+      Panel principal
+    </h1>
+
+    <p>
+      Resumen operativo de vuelos, reservas y actividad del sistema.
+    </p>
+  </div>
+
+  <div
+    class="d-flex gap-2 flex-wrap"
+    id="acciones-administrador"
+  >
+    <a
+      href="/usuarios/?crear=1"
+      class="btn btn-outline-primary btn-sm"
     >
-        <div>
-            <h1 class="h3 mb-1">
-                Panel principal
-            </h1>
+      <i class="bi bi-person-plus"></i>
+      Crear usuario
+    </a>
 
-            <p class="text-muted mb-0">
-                Bienvenido,
-                <strong id="nombre-usuario">
-                    usuario
-                </strong>
-            </p>
+    <a
+      href="/vuelos/?crear=1"
+      class="btn btn-outline-primary btn-sm"
+    >
+      <i class="bi bi-send-plus"></i>
+      Registrar vuelo
+    </a>
 
+    <a
+      href="/reservas/"
+      class="btn btn-accent btn-sm"
+    >
+      <i class="bi bi-journal-check"></i>
+      Ver reservas
+    </a>
+  </div>
+</div>
+
+<div
+  class="row g-3 mb-3"
+  id="tarjetas-kpi"
+>
+  <div
+    class="col-6 col-md-4 col-xl-2"
+    id="tarjeta-usuarios"
+  >
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-people"></i>
+        Usuarios
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="usuarios"
+      >
+        <span
+          class="skeleton skeleton-line"
+          style="width: 60%; height: 22px;"
+        ></span>
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        Total registrados
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-send"></i>
+        Vuelos disponibles
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="vuelos_disponibles"
+      >
+        —
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        Estado DISPONIBLE
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-check2-circle"></i>
+        Confirmadas
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="reservas_confirmadas"
+      >
+        —
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        Reservas activas
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-hourglass-split"></i>
+        Pendientes
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="reservas_pendientes"
+      >
+        —
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        Requieren pago
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-graph-up"></i>
+        Ocupación
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="ocupacion_pct"
+      >
+        —
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        Promedio de la flota
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="kpi h-100">
+      <div class="kpi-label">
+        <i class="bi bi-bell"></i>
+        Notif. pendientes
+      </div>
+
+      <div
+        class="kpi-value"
+        data-kpi="notificaciones_pendientes"
+      >
+        —
+      </div>
+
+      <div class="kpi-delta text-subtle">
+        No leídas
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-xl-8">
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <span>
+          Vuelos próximos
+        </span>
+
+        <a
+          href="/vuelos/"
+          class="small text-decoration-none"
+        >
+          Ver todos
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="table-responsive">
+        <table
+          class="table mb-0"
+          id="tabla-vuelos-proximos"
+        >
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Ruta</th>
+              <th scope="col">Aeronave</th>
+              <th scope="col">Salida</th>
+              <th scope="col">Estado</th>
+              <th
+                scope="col"
+                class="text-end"
+              >
+                Asientos
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td
+                colspan="6"
+                class="empty-state py-4"
+              >
+                <span
+                  class="skeleton skeleton-line"
+                  style="width: 100%; height: 14px;"
+                ></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        Distribución de reservas por estado
+      </div>
+
+      <div class="card-body">
+        <div
+          id="grafico-reservas"
+          style="
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-subtle);
+            font-size: 0.85rem;
+          "
+        >
+          <div class="text-center">
+            <i class="bi bi-bar-chart-line fs-3 text-subtle"></i>
+
+            <div class="mt-2">
+              Espacio reservado para Chart.js o QuickChart.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-12 col-xl-4"
+    id="tarjeta-bitacora"
+  >
+    <div class="card h-100">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <span>
+          Actividad reciente
+        </span>
+
+        <a
+          href="/bitacora/"
+          class="small text-decoration-none"
+        >
+          Bitácora
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="card-body p-0">
+        <ul
+          class="list-unstyled m-0"
+          id="lista-bitacora-reciente"
+        >
+          <li class="p-3 text-subtle small">
             <span
-                id="rol-usuario"
-                class="badge text-bg-primary mt-2"
+              class="skeleton skeleton-line"
+              style="width: 80%; height: 12px;"
             ></span>
-        </div>
+          </li>
 
-        <button
-            type="button"
-            id="boton-logout"
-            class="btn btn-outline-danger"
-        >
-            Cerrar sesión
-        </button>
+          <li class="p-3 text-subtle small border-top">
+            <span
+              class="skeleton skeleton-line"
+              style="width: 70%; height: 12px;"
+            ></span>
+          </li>
+
+          <li class="p-3 text-subtle small border-top">
+            <span
+              class="skeleton skeleton-line"
+              style="width: 60%; height: 12px;"
+            ></span>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    <div
-        id="mensaje-error"
-        class="alert alert-danger d-none"
-    ></div>
-
-    <div class="row g-4">
-        <div
-            class="col-md-6 col-lg-4"
-            id="tarjeta-usuarios"
-        >
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h5">
-                        Usuarios
-                    </h2>
-
-                    <p class="text-muted">
-                        Administre las cuentas y sus estados.
-                    </p>
-
-                    <button
-                        class="btn btn-primary"
-                        disabled
-                    >
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h5">
-                        Notificaciones
-                    </h2>
-
-                    <p class="text-muted">
-                        Consulte los avisos relacionados con su cuenta.
-                    </p>
-
-                    <button
-                        class="btn btn-primary"
-                        disabled
-                    >
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="col-md-6 col-lg-4"
-            id="tarjeta-bitacora"
-        >
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h5">
-                        Bitácora
-                    </h2>
-
-                    <p class="text-muted">
-                        Revise los eventos registrados en el sistema.
-                    </p>
-
-                    <button
-                        class="btn btn-primary"
-                        disabled
-                    >
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h5">
-                        Cambiar contraseña
-                    </h2>
-
-                    <p class="text-muted">
-                        Actualice de forma segura su credencial.
-                    </p>
-
-                    <button
-                        class="btn btn-primary"
-                        disabled
-                    >
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'js/panel.js' %}"></script>
+  </div>
+</div>
 {% endblock %}

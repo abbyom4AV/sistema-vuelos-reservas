@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+Acceso denegado · Sistema de Gestión de Vuelos
+{% endblock %}
+
+{% block contenido %}
+<main
+  class="min-vh-100 d-flex align-items-center justify-content-center p-4"
+  style="background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);"
+>
+  <section
+    class="text-center"
+    style="max-width: 640px;"
+    aria-labelledby="titulo-acceso-denegado"
+  >
+    <div
+      class="d-inline-flex align-items-center justify-content-center mb-4"
+      style="
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        color: #b42318;
+        background: #fee4e2;
+        font-size: 3.5rem;
+      "
+      aria-hidden="true"
+    >
+      <i class="bi bi-shield-lock-fill"></i>
+    </div>
+
+    <p
+      class="mb-2 text-uppercase fw-semibold"
+      style="color: #b42318; letter-spacing: 0.12em;"
+    >
+      Error 403
+    </p>
+
+    <h1
+      id="titulo-acceso-denegado"
+      class="display-4 fw-bold mb-3"
+    >
+      Acceso denegado
+    </h1>
+
+    <p class="fs-5 text-muted mb-4">
+      Tu cuenta no tiene los permisos necesarios para acceder a esta sección.
+    </p>
+
+    <a
+      href="{% url 'interfaz:panel' %}"
+      class="btn btn-primary btn-lg"
+    >
+      <i class="bi bi-arrow-left me-1"></i>
+      Volver al panel principal
+    </a>
+  </section>
+</main>
+{% endblock %}

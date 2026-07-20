@@ -1,0 +1,175 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Notificaciones · Sistema de Gestión de Vuelos
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Notificaciones
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+<div class="page-header">
+  <div>
+    <h1>
+      Notificaciones
+    </h1>
+
+    <p>
+      Consulta los eventos del sistema dirigidos a tu cuenta.
+    </p>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      id="notif-marcar-todas"
+    >
+      <i class="bi bi-check2-all"></i>
+
+      <span data-label>
+        Marcar todas como leídas
+      </span>
+
+      <span
+        class="spinner"
+        hidden
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-toolbar">
+    <select
+      class="form-select form-select-sm"
+      id="notif-tipo"
+      style="max-width: 180px;"
+      aria-label="Filtrar notificaciones por tipo"
+    >
+      <option value="">
+        Todos los tipos
+      </option>
+
+      <option value="SEGURIDAD">
+        Seguridad
+      </option>
+
+      <option value="RESERVA">
+        Reserva
+      </option>
+
+      <option value="PAGO">
+        Pago
+      </option>
+
+      <option value="VUELO">
+        Vuelo
+      </option>
+
+      <option value="SISTEMA">
+        Sistema
+      </option>
+    </select>
+
+    <select
+      class="form-select form-select-sm"
+      id="notif-estado"
+      style="max-width: 180px;"
+      aria-label="Filtrar notificaciones por estado"
+    >
+      <option value="">
+        Todos los estados
+      </option>
+
+      <option value="false">
+        No leídas
+      </option>
+
+      <option value="true">
+        Leídas
+      </option>
+    </select>
+
+    <button
+      type="button"
+      class="btn btn-outline-primary btn-sm ms-auto"
+      id="notif-refrescar"
+    >
+      <i class="bi bi-arrow-clockwise"></i>
+
+      <span data-label>
+        Actualizar
+      </span>
+
+      <span
+        class="spinner"
+        hidden
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
+
+  <div
+    id="notif-mensaje-error"
+    class="alert alert-danger m-3"
+    role="alert"
+    hidden
+  >
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span data-msg></span>
+  </div>
+
+  <div
+    id="notif-mensaje-exito"
+    class="alert alert-success m-3"
+    role="status"
+    hidden
+  >
+    <i class="bi bi-check-circle-fill"></i>
+    <span data-msg></span>
+  </div>
+
+  <div
+    id="notif-lista"
+    aria-live="polite"
+  >
+    <div class="p-3">
+      <div
+        class="skeleton skeleton-line"
+        style="width: 100%; height: 48px;"
+      ></div>
+
+      <div
+        class="skeleton skeleton-line mt-2"
+        style="width: 100%; height: 48px;"
+      ></div>
+
+      <div
+        class="skeleton skeleton-line mt-2"
+        style="width: 100%; height: 48px;"
+      ></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block panel_js %}
+<script src="{% static 'js/notificaciones.js' %}"></script>
+{% endblock %}

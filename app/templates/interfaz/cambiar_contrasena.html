@@ -1,0 +1,591 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Cambiar contraseña · Sistema de Gestión de Vuelos
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span>
+    Configuración
+  </span>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Cambiar contraseña
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+<div class="page-header">
+  <div>
+    <h1>
+      Cambiar contraseña
+    </h1>
+
+    <p>
+      Actualiza de forma segura la contraseña asociada con tu cuenta.
+    </p>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-7">
+    <div class="card">
+      <div class="card-body">
+        <div
+          class="alert alert-danger mb-3"
+          id="pw-error"
+          role="alert"
+          hidden
+        >
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span data-msg></span>
+        </div>
+
+        <div
+          class="alert alert-success mb-3"
+          id="pw-ok"
+          role="status"
+          hidden
+        >
+          <i class="bi bi-check2-circle"></i>
+          <span>
+            Contraseña actualizada correctamente.
+          </span>
+        </div>
+
+        <form
+          id="form-cambiar-contrasena"
+          novalidate
+        >
+          <div class="mb-3">
+            <label
+              for="contrasena-actual"
+              class="form-label"
+            >
+              Contraseña actual
+            </label>
+
+            <div class="input-group">
+              <input
+                type="password"
+                id="contrasena-actual"
+                name="contrasena_actual"
+                class="form-control"
+                autocomplete="current-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="btn btn-icon"
+                data-toggle-pw
+                aria-label="Mostrar contraseña actual"
+                aria-pressed="false"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+
+            <div
+              class="field-error"
+              data-error="contrasena_actual"
+              hidden
+            ></div>
+          </div>
+
+          <div class="mb-3">
+            <label
+              for="pw-nueva"
+              class="form-label"
+            >
+              Nueva contraseña
+            </label>
+
+            <div class="input-group">
+              <input
+                type="password"
+                id="pw-nueva"
+                name="nueva_contrasena"
+                class="form-control"
+                minlength="8"
+                autocomplete="new-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="btn btn-icon"
+                data-toggle-pw
+                aria-label="Mostrar nueva contraseña"
+                aria-pressed="false"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+
+            <div
+              class="pw-meter"
+              aria-hidden="true"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <ul
+              class="pw-requirements ps-0"
+              id="pw-checklist"
+            >
+              <li data-rule="len">
+                Mínimo 8 caracteres
+              </li>
+
+              <li data-rule="upper">
+                Al menos una mayúscula
+              </li>
+
+              <li data-rule="num">
+                Al menos un número
+              </li>
+
+              <li data-rule="sym">
+                Al menos un símbolo
+              </li>
+            </ul>
+
+            <div
+              class="field-error"
+              data-error="nueva_contrasena"
+              hidden
+            ></div>
+          </div>
+
+          <div class="mb-4">
+            <label
+              for="pw-confirmar"
+              class="form-label"
+            >
+              Confirmar nueva contraseña
+            </label>
+
+            <div class="input-group">
+              <input
+                type="password"
+                id="pw-confirmar"
+                name="confirmar_contrasena"
+                class="form-control"
+                autocomplete="new-password"
+                required
+              >
+
+              <button
+                type="button"
+                class="btn btn-icon"
+                data-toggle-pw
+                aria-label="Mostrar confirmación de contraseña"
+                aria-pressed="false"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+
+            <div
+              class="field-error"
+              id="pw-match-error"
+              hidden
+            >
+              Las contraseñas no coinciden.
+            </div>
+
+            <div
+              class="field-error"
+              data-error="confirmar_contrasena"
+              hidden
+            ></div>
+          </div>
+
+          <div class="d-flex gap-2 justify-content-end flex-wrap">
+            <button
+              type="reset"
+              class="btn btn-ghost"
+              id="pw-cancelar"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="pw-submit"
+            >
+              <span data-label>
+                Actualizar contraseña
+              </span>
+
+              <span
+                class="spinner"
+                hidden
+                aria-hidden="true"
+              ></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-5">
+    <div class="card">
+      <div class="card-header">
+        Recomendaciones de seguridad
+      </div>
+
+      <div class="card-body small text-muted-2 stack-sm">
+        <p class="mb-2">
+          <i class="bi bi-shield-check text-success"></i>
+          Utiliza una contraseña única y distinta a las de otros sistemas.
+        </p>
+
+        <p class="mb-2">
+          <i class="bi bi-shield-check text-success"></i>
+          Combina mayúsculas, minúsculas, números y símbolos.
+        </p>
+
+        <p class="mb-2">
+          <i class="bi bi-shield-check text-success"></i>
+          Evita utilizar información personal fácil de deducir.
+        </p>
+
+        <p class="mb-0">
+          <i class="bi bi-shield-check text-success"></i>
+          La verificación en dos pasos seguirá activa después del cambio.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block panel_js %}
+<script>
+$(function () {
+  "use strict";
+
+  const $form = $("#form-cambiar-contrasena");
+  const $actual = $("#contrasena-actual");
+  const $nueva = $("#pw-nueva");
+  const $confirmar = $("#pw-confirmar");
+  const $medidor = $(".pw-meter span");
+  const $errorGeneral = $("#pw-error");
+  const $exito = $("#pw-ok");
+  const $errorCoincidencia = $("#pw-match-error");
+  const $boton = $("#pw-submit");
+
+  function mostrarErrorGeneral(mensaje) {
+    $errorGeneral
+      .find("[data-msg]")
+      .text(mensaje);
+
+    $errorGeneral.prop("hidden", false);
+  }
+
+  function ocultarMensajes() {
+    $errorGeneral.prop("hidden", true);
+    $exito.prop("hidden", true);
+    $errorCoincidencia.prop("hidden", true);
+
+    $("[data-error]")
+      .text("")
+      .prop("hidden", true);
+  }
+
+  function establecerCarga(activa) {
+    $boton.prop("disabled", activa);
+
+    $boton
+      .find(".spinner")
+      .prop("hidden", !activa);
+
+    $boton
+      .find("[data-label]")
+      .text(
+        activa
+          ? "Actualizando…"
+          : "Actualizar contraseña"
+      );
+  }
+
+  function evaluarContrasena(valor) {
+    const reglas = {
+      len: valor.length >= 8,
+      upper: /[A-Z]/.test(valor),
+      num: /\d/.test(valor),
+      sym: /[^A-Za-z0-9]/.test(valor),
+    };
+
+    let puntuacion = 0;
+
+    Object.entries(reglas).forEach(
+      ([regla, cumple]) => {
+        $(
+          '#pw-checklist li[data-rule="' +
+          regla +
+          '"]'
+        ).toggleClass("ok", cumple);
+
+        if (cumple) {
+          puntuacion += 1;
+        }
+      }
+    );
+
+    $medidor.removeClass(
+      "on-1 on-2 on-3 on-4"
+    );
+
+    for (
+      let indice = 0;
+      indice < puntuacion;
+      indice += 1
+    ) {
+      $medidor
+        .eq(indice)
+        .addClass("on-" + puntuacion);
+    }
+
+    return puntuacion;
+  }
+
+  function obtenerMensajeError(datos) {
+    if (!datos) {
+      return "No se pudo actualizar la contraseña.";
+    }
+
+    if (datos.message) {
+      return datos.message;
+    }
+
+    if (datos.detail) {
+      return datos.detail;
+    }
+
+    const errores = datos.errors || datos;
+
+    if (
+      errores &&
+      typeof errores === "object"
+    ) {
+      const primerError =
+        Object.values(errores)[0];
+
+      if (Array.isArray(primerError)) {
+        return primerError[0];
+      }
+
+      if (typeof primerError === "string") {
+        return primerError;
+      }
+    }
+
+    return "No se pudo actualizar la contraseña.";
+  }
+
+  $("[data-toggle-pw]").on(
+    "click",
+    function () {
+      const $botonMostrar = $(this);
+      const $input =
+        $botonMostrar
+          .siblings("input")
+          .first();
+
+      const mostrar =
+        $input.attr("type") === "password";
+
+      $input.attr(
+        "type",
+        mostrar ? "text" : "password"
+      );
+
+      $botonMostrar
+        .attr("aria-pressed", mostrar)
+        .attr(
+          "aria-label",
+          mostrar
+            ? "Ocultar contraseña"
+            : "Mostrar contraseña"
+        );
+
+      $botonMostrar
+        .find("i")
+        .toggleClass(
+          "bi-eye bi-eye-slash"
+        );
+    }
+  );
+
+  $nueva.on(
+    "input",
+    function () {
+      evaluarContrasena(this.value);
+
+      if ($confirmar.val()) {
+        $errorCoincidencia.prop(
+          "hidden",
+          this.value === $confirmar.val()
+        );
+      }
+    }
+  );
+
+  $confirmar.on(
+    "input",
+    function () {
+      const mostrarError =
+        $nueva.val() !== "" &&
+        $nueva.val() !== this.value;
+
+      $errorCoincidencia.prop(
+        "hidden",
+        !mostrarError
+      );
+    }
+  );
+
+  $("#pw-cancelar").on(
+    "click",
+    function () {
+      ocultarMensajes();
+
+      $medidor.removeClass(
+        "on-1 on-2 on-3 on-4"
+      );
+
+      $("#pw-checklist li").removeClass("ok");
+    }
+  );
+
+  $form.on(
+    "submit",
+    async function (evento) {
+      evento.preventDefault();
+
+      ocultarMensajes();
+
+      const contrasenaActual =
+        $actual.val();
+
+      const nuevaContrasena =
+        $nueva.val();
+
+      const confirmarContrasena =
+        $confirmar.val();
+
+      if (!contrasenaActual) {
+        mostrarErrorGeneral(
+          "Debe ingresar la contraseña actual."
+        );
+
+        $actual.trigger("focus");
+        return;
+      }
+
+      if (
+        nuevaContrasena !==
+        confirmarContrasena
+      ) {
+        $errorCoincidencia.prop(
+          "hidden",
+          false
+        );
+
+        $confirmar.trigger("focus");
+        return;
+      }
+
+      if (
+        evaluarContrasena(
+          nuevaContrasena
+        ) < 3
+      ) {
+        mostrarErrorGeneral(
+          "La nueva contraseña no cumple los requisitos mínimos."
+        );
+
+        $nueva.trigger("focus");
+        return;
+      }
+
+      establecerCarga(true);
+
+      try {
+        const respuesta =
+          await ApiCliente.solicitar(
+            "/api/auth/cambiar-contrasena/",
+            {
+              method: "PUT",
+              body: JSON.stringify({
+                password_actual:
+                  contrasenaActual,
+
+                nueva_password:
+                  nuevaContrasena,
+
+                confirmar_password:
+                  confirmarContrasena,
+              }),
+            }
+          );
+
+        if (!respuesta.ok) {
+          mostrarErrorGeneral(
+            obtenerMensajeError(
+              respuesta.data
+            )
+          );
+
+          return;
+        }
+
+        $exito.prop("hidden", false);
+
+        this.reset();
+
+        $medidor.removeClass(
+          "on-1 on-2 on-3 on-4"
+        );
+
+        $("#pw-checklist li")
+          .removeClass("ok");
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } catch (error) {
+        mostrarErrorGeneral(
+          "No fue posible actualizar la contraseña. Revise la conexión e inténtelo nuevamente."
+        );
+      } finally {
+        establecerCarga(false);
+      }
+    }
+  );
+});
+</script>
+{% endblock %}
