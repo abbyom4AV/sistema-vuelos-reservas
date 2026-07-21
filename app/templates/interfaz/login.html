@@ -23,21 +23,30 @@ Iniciar sesión · FlyTrack
       </span>
     </div>
 
+    <figure class="auth-flight-image" aria-hidden="true">
+      <img
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+        data-source="{% static 'img/flytrack-aircraft-hd.png' %}"
+        alt=""
+      >
+    </figure>
+
     <div class="auth-tagline">
       <span class="auth-kicker">
-        Gestión aérea inteligente
+        Vuela a tu manera
       </span>
 
       <strong>
-        Operaciones aéreas centralizadas
+        Tu próxima aventura comienza aquí
       </strong>
 
-      Administra vuelos, reservas y operaciones desde una plataforma segura,
-      trazable y preparada para cada etapa del viaje.
+      Descubre destinos, organiza tus reservas y mantente al día con cada
+      detalle de tu viaje.
 
-      <div class="auth-route" aria-hidden="true">
-        <span></span>
-        <i class="bi bi-airplane-fill"></i>
+      <div class="auth-benefits">
+        <span><i class="bi bi-search"></i> Busca vuelos</span>
+        <span><i class="bi bi-shield-check"></i> Reserva seguro</span>
+        <span><i class="bi bi-bell"></i> Todo al momento</span>
       </div>
     </div>
   </aside>
@@ -175,6 +184,14 @@ Iniciar sesión · FlyTrack
           <i class="bi bi-shield-check"></i>
           Acceso protegido con verificación en dos pasos.
         </p>
+
+        <p class="form-hint text-center mt-2 mb-0">
+          <span class="auth-divider"></span>
+          ¿Aún no tienes cuenta?
+          <a href="{% url 'interfaz:registro' %}">
+            Crear cuenta de cliente
+          </a>
+        </p>
       </form>
     </section>
   </main>
@@ -182,5 +199,6 @@ Iniciar sesión · FlyTrack
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/auth-aircraft.js' %}"></script>
 <script src="{% static 'js/login.js' %}"></script>
 {% endblock %}

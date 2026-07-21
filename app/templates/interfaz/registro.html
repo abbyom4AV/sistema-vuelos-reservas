@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Crear cuenta · FlyTrack{% endblock %}
+
+{% block contenido %}
+<div class="auth-layout">
+  <aside class="auth-aside">
+    <div class="auth-brand">
+      <span class="brand-mark">
+        <img src="{% static 'img/flytrack-logo.svg' %}" class="brand-logo" alt="">
+      </span>
+      <span class="auth-brand-name">FlyTrack<small>Vuelos y reservas</small></span>
+    </div>
+    <figure class="auth-flight-image" aria-hidden="true">
+      <img
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+        data-source="{% static 'img/flytrack-aircraft-hd.png' %}"
+        alt=""
+      >
+    </figure>
+    <div class="auth-tagline">
+      <span class="auth-kicker">FlyTrack para viajeros</span>
+      <strong>Todo viaje comienza con una decisión</strong>
+      Crea tu cuenta, descubre nuevos destinos y reúne cada detalle de tus
+      próximas reservas en un solo lugar.
+      <div class="auth-benefits">
+        <span><i class="bi bi-person-check"></i> Cuenta personal</span>
+        <span><i class="bi bi-compass"></i> Nuevos destinos</span>
+        <span><i class="bi bi-suitcase2"></i> Viajes organizados</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="auth-main">
+    <section class="auth-card" aria-labelledby="titulo-registro">
+      <p class="auth-kicker">Cuenta de cliente</p>
+      <h1 id="titulo-registro">Crea tu cuenta</h1>
+      <p class="auth-subtitle">Estás a pocos pasos de comenzar a organizar tus próximos viajes.</p>
+      <div id="mensaje-error" class="alert alert-danger mb-3" role="alert" hidden>
+        <i class="bi bi-exclamation-triangle-fill"></i><span data-msg></span>
+      </div>
+      <div id="mensaje-exito" class="alert alert-success mb-3" role="status" hidden>
+        <i class="bi bi-check2-circle"></i><span data-msg></span>
+      </div>
+      <form id="form-registro" novalidate>
+        <div class="row g-3">
+          <div class="col-6"><label class="form-label" for="registro-nombre">Nombre</label><input id="registro-nombre" class="form-control" required></div>
+          <div class="col-6"><label class="form-label" for="registro-apellido">Apellido</label><input id="registro-apellido" class="form-control" required></div>
+          <div class="col-12"><label class="form-label" for="registro-email">Correo electrónico</label><input id="registro-email" class="form-control" type="email" autocomplete="email" required></div>
+          <div class="col-12"><label class="form-label" for="registro-username">Nombre de usuario</label><input id="registro-username" class="form-control" autocomplete="username" required></div>
+          <div class="col-12"><label class="form-label" for="registro-password">Contraseña</label><input id="registro-password" class="form-control" type="password" autocomplete="new-password" minlength="8" required></div>
+          <div class="col-12"><label class="form-label" for="registro-confirmar">Confirmar contraseña</label><input id="registro-confirmar" class="form-control" type="password" autocomplete="new-password" minlength="8" required></div>
+        </div>
+        <button id="boton-registro" class="btn btn-primary w-100 justify-content-center mt-4" type="submit"><span data-label>Crear cuenta</span><span class="spinner" hidden></span></button>
+        <p class="form-hint text-center mt-3 mb-0"><span class="auth-divider"></span>¿Ya tienes cuenta? <a href="{% url 'interfaz:login' %}">Inicia sesión</a></p>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/auth-aircraft.js' %}"></script>
+<script src="{% static 'js/registro.js' %}"></script>
+{% endblock %}

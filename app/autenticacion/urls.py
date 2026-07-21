@@ -4,6 +4,7 @@ from .views import (
     LoginView,
     LogoutView,
     RefreshJWTView,
+    RegistroClienteView,
     VerificarOTPView,
 )
 
@@ -15,6 +16,11 @@ urlpatterns = [
         "login/",
         LoginView.as_view(),
         name="login",
+    ),
+    path(
+        "registro/",
+        RegistroClienteView.as_view(),
+        name="registro",
     ),
     path(
         "verificar-otp/",

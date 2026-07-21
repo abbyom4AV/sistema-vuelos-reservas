@@ -25,6 +25,7 @@ from .serializers import (
     CambiarContrasenaSerializer,
     LoginSerializer,
     LogoutSerializer,
+    RegistroClienteSerializer,
     VerificarOTPSerializer,
 )
 from .services import (
@@ -180,6 +181,67 @@ class LoginView(APIView):
         return Response(
             respuesta,
             status=status.HTTP_200_OK,
+        )
+
+
+class RegistroClienteView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @extend_schema(
+        request=RegistroClienteSerializer,
+        responses={
+            201: OpenApiResponse(
+                description=(
+                    "Cuenta de cliente creada correctamente."
+                )
+            ),
+            400: OpenApiResponse(
+                description="Datos de registro inválidos."
+            ),
+        },
+        tags=["Autenticación"],
+    )
+    @transaction.atomic
+    def post(self, request):
+        serializer = RegistroClienteSerializer(
+            data=request.data
+        )
+        serializer.is_valid(raise_exception=True)
+        usuario = serializer.save()
+
+        registrar_evento(
+            request=request,
+            usuario=usuario,
+            accion="REGISTRO_CLIENTE",
+            entidad="Usuario",
+            entidad_id=usuario.pk,
+            resultado=Bitacora.Resultado.EXITO,
+            detalle="El cliente creó su propia cuenta.",
+        )
+        crear_notificacion(
+            usuario=usuario,
+            tipo=Notificacion.Tipo.SISTEMA,
+            titulo="Bienvenido a FlyTrack",
+            mensaje=(
+                "Tu cuenta de cliente fue creada correctamente."
+            ),
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": (
+                    "Cuenta creada correctamente. "
+                    "Ahora puedes iniciar sesión."
+                ),
+                "data": {
+                    "id": usuario.pk,
+                    "email": usuario.email,
+                    "rol": usuario.rol.nombre,
+                },
+            },
+            status=status.HTTP_201_CREATED,
         )
 
 
