@@ -23,6 +23,14 @@ Verificación de seguridad · FlyTrack
       </span>
     </div>
 
+    <figure class="auth-flight-image" aria-hidden="true">
+      <img
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+        data-source="{% static 'img/flytrack-aircraft-hd.png' %}"
+        alt=""
+      >
+    </figure>
+
     <div class="auth-tagline">
       <strong>
         Un segundo factor por sesión
@@ -145,5 +153,6 @@ Verificación de seguridad · FlyTrack
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/auth-aircraft.js' %}"></script>
 <script src="{% static 'js/otp.js' %}"></script>
 {% endblock %}

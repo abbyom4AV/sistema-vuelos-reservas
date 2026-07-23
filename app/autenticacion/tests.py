@@ -6,6 +6,8 @@ from autenticacion.models import CodigoOTP
 from autenticacion.services import generar_codigo_otp
 from autenticacion.views import OTP_SIGNING_SALT
 from notificaciones.models import Notificacion
+from auditoria.models import Bitacora
+from usuarios.models import Usuario
 
 
 @pytest.mark.django_db
@@ -23,6 +25,36 @@ def test_login_correcto_generates_otp(api_client, client_user):
     assert response.data["success"] is True
     assert response.data["data"]["otp_requerido"] is True
     assert CodigoOTP.objects.filter(usuario=client_user).exists()
+
+
+@pytest.mark.django_db
+def test_registro_publico_crea_solo_cliente(
+    api_client,
+    roles,
+):
+    response = api_client.post(
+        "/api/auth/registro/",
+        {
+            "first_name": "Nuevo",
+            "last_name": "Cliente",
+            "email": "nuevo.cliente@test.local",
+            "username": "nuevo_cliente",
+            "password": "ClaveSegura123!",
+            "confirmar_password": "ClaveSegura123!",
+        },
+        format="json",
+    )
+
+    user = Usuario.objects.get(
+        email="nuevo.cliente@test.local"
+    )
+    assert response.status_code == 201
+    assert user.tiene_rol("CLIENTE")
+    assert Notificacion.objects.filter(usuario=user).exists()
+    assert Bitacora.objects.filter(
+        usuario=user,
+        accion="REGISTRO_CLIENTE",
+    ).exists()
 
 
 @pytest.mark.django_db

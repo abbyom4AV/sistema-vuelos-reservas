@@ -11,6 +11,7 @@ from .views import (
     mis_reservas_view,
     notificaciones_view,
     panel_view,
+    registro_view,
     usuarios_view,
     verificar_otp_view,
 )
@@ -24,6 +25,11 @@ urlpatterns = [
         "",
         login_view,
         name="login",
+    ),
+    path(
+        "registro/",
+        registro_view,
+        name="registro",
     ),
     path(
         "verificar-otp/",

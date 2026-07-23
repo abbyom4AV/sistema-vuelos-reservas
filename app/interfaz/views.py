@@ -10,6 +10,13 @@ def login_view(request):
     )
 
 
+def registro_view(request):
+    return render(
+        request,
+        "interfaz/registro.html",
+    )
+
+
 def verificar_otp_view(request):
     return render(
         request,
