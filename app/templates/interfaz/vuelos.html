@@ -1,0 +1,457 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Vuelos · FlyTrack
+{% endblock %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block breadcrumbs %}
+
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+<span class="sep">/</span>
+
+  <span aria-current="page">
+    Vuelos
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+
+<div class="page-header">
+  <div>
+    <h1>
+      Vuelos
+    </h1>
+
+
+<p>
+  Gestiona los vuelos programados y disponibles de FlyTrack.
+</p>
+
+
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-accent"
+      id="btn-nuevo-vuelo"
+    >
+      <i class="bi bi-send-plus"></i>
+      Nuevo vuelo
+    </button>
+  </div>
+</div>
+
+<!-- PARA FILTROS -->
+
+<div class="card mb-3">
+
+  <div class="card-header">
+    Buscar vuelos
+  </div>
+
+  <div class="card-body">
+
+
+<form id="form-filtros-vuelos">
+
+  <div class="row g-3">
+
+    <div class="col-12 col-md-4">
+
+      <label
+        for="filtro-origen"
+        class="form-label"
+      >
+        Origen
+      </label>
+
+      <input
+        type="text"
+        class="form-control"
+        id="filtro-origen"
+        placeholder="Ej. San José"
+      >
+
+    </div>
+
+
+    <div class="col-12 col-md-4">
+
+      <label
+        for="filtro-destino"
+        class="form-label"
+      >
+        Destino
+      </label>
+
+      <input
+        type="text"
+        class="form-control"
+        id="filtro-destino"
+        placeholder="Ej. Miami"
+      >
+
+    </div>
+
+
+    <div class="col-12 col-md-4">
+
+      <label
+        for="filtro-fecha"
+        class="form-label"
+      >
+        Fecha
+      </label>
+
+      <input
+        type="date"
+        class="form-control"
+        id="filtro-fecha"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="d-flex gap-2 mt-3">
+
+    <button
+      type="submit"
+      class="btn btn-accent"
+    >
+      <i class="bi bi-search"></i>
+      Buscar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      id="btn-limpiar-filtros"
+    >
+      Limpiar
+    </button>
+
+  </div>
+
+</form>
+
+
+  </div>
+
+</div>
+
+<!-- ESPACIO PARA TABLA DE VUELOS -->
+
+<div class="card">
+
+  <div class="card-header">
+    Vuelos registrados
+  </div>
+
+  <div class="table-responsive">
+
+
+<table class="table mb-0">
+
+  <thead>
+
+    <tr>
+      <th>Ruta</th>
+      <th>Aeronave</th>
+      <th>Fecha</th>
+      <th>Hora</th>
+      <th>Precio</th>
+      <th>Estado</th>
+      <th>Cupos</th>
+      <th>Acciones</th>
+    </tr>
+
+  </thead>
+
+  <tbody id="tabla-vuelos">
+
+    <tr>
+
+      <td
+        colspan="8"
+        class="text-center"
+      >
+        Cargando vuelos...
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+
+
+  </div>
+
+</div>
+
+<!-- PARA MODAL NUEVO VUELO -->
+
+<div
+  class="modal fade"
+  id="modal-vuelo"
+  tabindex="-1"
+  aria-hidden="true"
+>
+
+  <div class="modal-dialog modal-lg">
+
+
+<div class="modal-content">
+
+  <div class="modal-header">
+
+    <h5 class="modal-title" 
+    id="titulo-modal-vuelo">
+      Nuevo vuelo
+    </h5>
+
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Cerrar"
+    ></button>
+
+  </div>
+
+
+  <div class="modal-body">
+
+    <form id="form-vuelo">
+
+
+      <!-- PARA LA RUTA -->
+
+      <div class="mb-3">
+
+        <label
+          for="ruta"
+          class="form-label"
+        >
+          Ruta
+        </label>
+
+        <select
+          class="form-select"
+          id="ruta"
+          name="ruta"
+          required
+        >
+
+          <option value="">
+            Seleccione una ruta
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- PARA AERONAVE -->
+
+      <div class="mb-3">
+
+        <label
+          for="aeronave"
+          class="form-label"
+        >
+          Aeronave
+        </label>
+
+        <select
+          class="form-select"
+          id="aeronave"
+          name="aeronave"
+          required
+        >
+
+          <option value="">
+            Seleccione una aeronave
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="row g-3">
+
+
+        <!-- COLOCAR FECHA -->
+
+        <div class="col-12 col-md-6">
+
+          <label
+            for="fecha"
+            class="form-label"
+          >
+            Fecha
+          </label>
+
+          <input
+            type="date"
+            class="form-control"
+            id="fecha"
+            name="fecha"
+            required
+          >
+
+        </div>
+
+
+        <!-- COLOCAR HORA -->
+
+        <div class="col-12 col-md-6">
+
+          <label
+            for="hora"
+            class="form-label"
+          >
+            Hora
+          </label>
+
+          <input
+            type="time"
+            class="form-control"
+            id="hora"
+            name="hora"
+            required
+          >
+
+        </div>
+
+
+      </div>
+
+
+      <!-- PARA PRECIO -->
+
+      <div class="mb-3 mt-3">
+
+        <label
+          for="precio_base"
+          class="form-label"
+        >
+          Precio base
+        </label>
+
+        <input
+          type="number"
+          class="form-control"
+          id="precio_base"
+          name="precio_base"
+          min="0"
+          step="0.01"
+          placeholder="Ej. 250.00"
+          required
+        >
+
+      </div>
+
+
+      <!-- ESTADO -->
+
+      <div class="mb-3">
+
+        <label
+          for="estado-vuelo"
+          class="form-label"
+        >
+          Estado
+        </label>
+
+        <select
+          class="form-select"
+          id="estado-vuelo"
+          name="estado"
+        >
+
+          <option value="PROGRAMADO">
+            Programado
+          </option>
+
+          <option value="ACTIVO">
+            Activo
+          </option>
+
+          <option value="CERRADO">
+            Cerrado
+          </option>
+
+          <option value="CANCELADO">
+            Cancelado
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- PARA MENSAJE -->
+
+      <div
+        id="mensaje-vuelo"
+        class="alert d-none"
+      ></div>
+
+
+      <!--PARA BOTONES -->
+
+      <div class="d-flex justify-content-end gap-2">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-accent"
+          id="btn-guardar-vuelo"
+        >
+          Guardar vuelo
+        </button>
+
+      </div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block panel_js %}
+
+<script src="{% static 'js/vuelos.js' %}?v=1"></script>
+
+{% endblock %}

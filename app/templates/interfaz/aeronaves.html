@@ -1,0 +1,258 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Aeronaves · FlyTrack
+{% endblock %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block breadcrumbs %}
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Aeronaves
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+
+<div class="page-header">
+  <div>
+    <h1>
+      Aeronaves
+    </h1>
+
+    <p>
+      Gestiona las aeronaves disponibles para los vuelos de FlyTrack.
+    </p>
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-accent"
+      id="btn-nueva-aeronave"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Nueva aeronave
+    </button>
+  </div>
+</div>
+
+
+<div class="card">
+
+  <div class="card-header">
+    Aeronaves registradas
+  </div>
+
+  <div class="table-responsive">
+
+    <table class="table mb-0">
+
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Modelo</th>
+          <th>Capacidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody id="tabla-aeronaves">
+
+        <tr>
+          <td
+            colspan="5"
+            class="text-center"
+          >
+            Cargando aeronaves...
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<div
+  class="modal fade"
+  id="modal-aeronave"
+  tabindex="-1"
+  aria-hidden="true"
+>
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+          Nueva aeronave
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        <form id="form-aeronave">
+
+          <div class="mb-3">
+
+            <label
+              for="codigo"
+              class="form-label"
+            >
+              Código
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="codigo"
+              name="codigo"
+              placeholder="Ej. DCH-024"
+              required
+            >
+
+          </div>
+
+
+          <div class="mb-3">
+
+            <label
+              for="modelo"
+              class="form-label"
+            >
+              Modelo
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="modelo"
+              name="modelo"
+              placeholder="Ej. Boeing 737-200"
+              required
+            >
+
+          </div>
+
+
+          <div class="mb-3">
+
+            <label
+              for="capacidad"
+              class="form-label"
+            >
+              Capacidad
+            </label>
+
+            <input
+              type="number"
+              class="form-control"
+              id="capacidad"
+              name="capacidad"
+              min="1"
+              required
+            >
+
+          </div>
+
+
+          <div class="mb-3">
+
+            <label
+              for="estado"
+              class="form-label"
+            >
+              Estado
+            </label>
+
+            <select
+              class="form-select"
+              id="estado"
+              name="estado"
+            >
+
+              <option value="ACTIVA">
+                Activa
+              </option>
+
+              <option value="MANTENIMIENTO">
+                Mantenimiento
+              </option>
+
+              <option value="INACTIVA">
+                Inactiva
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div
+            id="mensaje-aeronave"
+            class="alert d-none"
+          ></div>
+
+
+          <div class="d-flex justify-content-end gap-2">
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              class="btn btn-accent"
+            >
+              Guardar aeronave
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block panel_js %}
+<script src="{% static 'js/aeronaves.js' %}?v=2"></script>
+{% endblock %}

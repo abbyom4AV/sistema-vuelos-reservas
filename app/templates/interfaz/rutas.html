@@ -1,0 +1,240 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Rutas · FlyTrack
+{% endblock %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block breadcrumbs %}
+
+<nav
+  class="app-crumbs"
+  aria-label="breadcrumb"
+>
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+<span class="sep">/</span>
+
+  <span aria-current="page">
+    Rutas
+  </span>
+</nav>
+{% endblock %}
+
+{% block panel %}
+
+<div class="page-header">
+
+  <div>
+    <h1>
+      Rutas
+    </h1>
+
+<p>
+  Gestiona las rutas disponibles para los vuelos de FlyTrack.
+</p>
+
+  </div>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-accent"
+      id="btn-nueva-ruta"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Nueva ruta
+    </button>
+  </div>
+
+</div>
+
+<div class="card">
+
+  <div class="card-header">
+    Rutas registradas
+  </div>
+
+  <div class="table-responsive">
+
+<table class="table mb-0">
+
+  <thead>
+    <tr>
+      <th>Origen</th>
+      <th>Destino</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody id="tabla-rutas">
+
+    <tr>
+      <td
+        colspan="4"
+        class="text-center"
+      >
+        Cargando rutas...
+      </td>
+    </tr>
+
+  </tbody>
+
+</table>
+
+  </div>
+
+</div>
+
+<div
+  class="modal fade"
+  id="modal-ruta"
+  tabindex="-1"
+  aria-hidden="true"
+>
+
+  <div class="modal-dialog">
+
+<div class="modal-content">
+
+  <div class="modal-header">
+
+    <h5
+      class="modal-title"
+      id="titulo-modal-ruta"
+    >
+      Nueva ruta
+    </h5>
+
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Cerrar"
+    ></button>
+
+  </div>
+
+
+  <div class="modal-body">
+
+    <form id="form-ruta">
+
+      <input
+        type="hidden"
+        id="ruta-id"
+      >
+
+
+      <div class="mb-3">
+
+        <label
+          for="origen"
+          class="form-label"
+        >
+          Origen
+        </label>
+
+        <input
+          type="text"
+          class="form-control"
+          id="origen"
+          name="origen"
+          placeholder="Ej. San José"
+          required
+        >
+
+      </div>
+
+
+      <div class="mb-3">
+
+        <label
+          for="destino"
+          class="form-label"
+        >
+          Destino
+        </label>
+
+        <input
+          type="text"
+          class="form-control"
+          id="destino"
+          name="destino"
+          placeholder="Ej. Panamá"
+          required
+        >
+
+      </div>
+
+
+      <div class="mb-3">
+
+        <label
+          for="estado"
+          class="form-label"
+        >
+          Estado
+        </label>
+
+        <select
+          class="form-select"
+          id="estado"
+          name="estado"
+        >
+
+          <option value="ACTIVA">
+            Activa
+          </option>
+
+          <option value="INACTIVA">
+            Inactiva
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div
+        id="mensaje-ruta"
+        class="alert d-none"
+      ></div>
+
+
+      <div class="d-flex justify-content-end gap-2">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-accent"
+          id="btn-guardar-ruta"
+        >
+          Guardar ruta
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+  </div>
+
+</div>
+
+{% endblock %}
