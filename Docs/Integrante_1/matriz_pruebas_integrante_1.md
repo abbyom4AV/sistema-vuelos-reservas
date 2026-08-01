@@ -1,3 +1,4 @@
+
 # Matriz de pruebas — Integrante 1
 
 Las pruebas automatizadas usan SQLite en memoria para mantener aislamiento y
@@ -24,3 +25,5 @@ Docker.
 
 Insertar capturas de login, OTP, cambio de contraseña, bitácora y
 notificaciones ejecutadas contra MySQL en Docker.
+
+nota: para que acepte que hice cambio en el codigo del proyecto
