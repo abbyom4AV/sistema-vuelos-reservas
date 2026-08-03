@@ -1,0 +1,191 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block titulo %}
+Seleccionar asiento · FlyTrack
+{% endblock %}
+
+{% block breadcrumbs %}
+
+<nav class="app-crumbs" aria-label="breadcrumb">
+
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <a href="{% url 'interfaz:buscar-vuelos' %}">
+    Buscar vuelos
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Seleccionar asiento
+  </span>
+
+</nav>
+
+{% endblock %}
+
+
+{% block panel %}
+
+<section class="travel-hero">
+
+  <div class="travel-hero-content">
+
+    <p class="travel-eyebrow">
+      Personaliza tu viaje
+    </p>
+
+    <h1>
+      Selecciona tu asiento
+    </h1>
+
+    <p>
+      Elige directamente un asiento de la matriz del avión. Cada posición muestra fila y letra.
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="travel-search-card mt-4">
+
+  <div class="travel-search-header">
+
+    <div>
+
+      <h2>
+        Asientos del vuelo
+      </h2>
+
+      <p id="informacion-vuelo">
+        Cargando información del vuelo...
+      </p>
+
+    </div>
+
+    <span class="travel-status">
+      <i class="bi bi-grid-3x3-gap"></i>
+      Selección de asiento
+    </span>
+
+  </div>
+
+
+  <div
+    id="estado-asientos"
+    class="alert alert-info"
+    role="status"
+  >
+    Cargando asientos disponibles...
+  </div>
+
+
+  <div
+    id="lista-asientos"
+    class="row g-3"
+  ></div>
+
+
+  <div
+    id="resumen-asiento"
+    class="mt-4"
+    style="display: none;"
+  >
+
+    <div class="alert alert-success">
+
+      <strong>
+        Asiento seleccionado:
+      </strong>
+
+      <span id="asiento-seleccionado"></span>
+
+    </div>
+
+    <button
+      id="btn-confirmar-asiento"
+      type="button"
+      class="btn btn-primary w-100"
+    >
+
+      <i class="bi bi-check-circle"></i>
+
+      Confirmar asiento y crear reserva
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<section class="row g-3 mt-1">
+
+  <div class="col-12 col-md-4">
+
+    <article class="travel-feature h-100">
+
+      <i class="bi bi-circle-fill text-success"></i>
+
+      <h2>
+        Disponible
+      </h2>
+
+      <p>
+        Puedes seleccionar este asiento.
+      </p>
+
+    </article>
+
+  </div>
+
+
+  <div class="col-12 col-md-4">
+
+    <article class="travel-feature h-100">
+
+      <i class="bi bi-circle-fill text-danger"></i>
+
+      <h2>
+        Reservado
+      </h2>
+
+      <p>
+        Este asiento ya está ocupado.
+      </p>
+
+    </article>
+
+  </div>
+
+
+  <div class="col-12 col-md-4">
+
+    <article class="travel-feature h-100">
+
+      <i class="bi bi-circle-fill text-secondary"></i>
+
+      <h2>
+        Bloqueado
+      </h2>
+
+      <p>
+        Este asiento no está disponible para reservar.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<script src="{% static 'js/asientos.js' %}?v=3"></script>
+
+{% endblock %}

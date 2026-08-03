@@ -1,0 +1,120 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block rol_requerido %}ADMINISTRADOR{% endblock %}
+
+{% block titulo %}
+Reportes · FlyTrack
+{% endblock %}
+
+{% block breadcrumbs %}
+
+<nav class="app-crumbs" aria-label="breadcrumb">
+
+  <a href="{% url 'interfaz:panel' %}">
+    Inicio
+  </a>
+
+  <span class="sep">/</span>
+
+  <span aria-current="page">
+    Reportes
+  </span>
+
+</nav>
+
+{% endblock %}
+
+
+{% block panel %}
+
+<section class="travel-hero">
+
+  <div class="travel-hero-content">
+
+    <p class="travel-eyebrow">
+      Panel administrativo
+    </p>
+
+    <h1>
+      Dashboard de reservas
+    </h1>
+
+    <p>
+      Métricas generales del sistema: reservas por estado,
+      reservas por ruta y ocupación por vuelo.
+    </p>
+
+  </div>
+
+</section>
+
+
+<div
+  id="estado-dashboard"
+  class="alert alert-info mt-4"
+  role="status"
+>
+  Cargando métricas...
+</div>
+
+
+<section class="row g-3 mt-1" id="contenedor-dashboard" style="display: none;">
+
+  <div class="col-12 col-lg-6">
+
+    <article class="card h-100">
+
+      <div class="card-header">
+        Reservas por estado
+      </div>
+
+      <div class="card-body">
+        <canvas id="grafico-estado" height="220"></canvas>
+      </div>
+
+    </article>
+
+  </div>
+
+  <div class="col-12 col-lg-6">
+
+    <article class="card h-100">
+
+      <div class="card-header">
+        Reservas por ruta
+      </div>
+
+      <div class="card-body">
+        <canvas id="grafico-ruta" height="220"></canvas>
+      </div>
+
+    </article>
+
+  </div>
+
+  <div class="col-12">
+
+    <article class="card h-100">
+
+      <div class="card-header">
+        Ocupación por vuelo
+      </div>
+
+      <div class="card-body">
+        <canvas id="grafico-ocupacion" height="140"></canvas>
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block panel_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/reportes.js' %}?v=1"></script>
+{% endblock %}

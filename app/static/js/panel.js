@@ -462,7 +462,7 @@
           : Promise.resolve(null),
   
         API.get(
-          "/api/vuelos/?estado=DISPONIBLE"
+          "/api/vuelos/vuelos/?estado=PROGRAMADO"
         ),
   
         API.get(
@@ -496,7 +496,7 @@
       );
   
       setKpi(
-        "vuelos_disponibles",
+        "vuelos_programados",
         resultados[1].status === "fulfilled"
           ? extraerTotal(
               valor(resultados[1])
@@ -543,20 +543,38 @@
       }
     }
   
-    async function cargarVuelosProximos() {
-      try {
-        const datos =
-          await API.get(
-            "/api/vuelos/"
-          );
-  
-        renderVuelosProximos(
-          listaDe(datos).slice(0, 6)
-        );
-      } catch (error) {
-        renderVuelosProximos([]);
-      }
-    }
+async function cargarVuelosProximos() {
+  try {
+    const respuesta = await API.get(
+      "/api/vuelos/vuelos/"
+    );
+
+    console.log(
+      "RESPUESTA REAL DE VUELOS:",
+      respuesta
+    );
+
+    const vuelos = Array.isArray(respuesta)
+      ? respuesta
+      : respuesta?.data || [];
+
+    console.log(
+      "VUELOS EXTRAÍDOS:",
+      vuelos
+    );
+
+    renderVuelosProximos(vuelos.slice(0, 6));
+
+  } catch (error) {
+
+    console.error(
+      "ERROR CARGANDO VUELOS PRÓXIMOS:",
+      error
+    );
+
+    renderVuelosProximos([]);
+  }
+}
   
     function renderVuelosProximos(items) {
       const tbody =
@@ -592,32 +610,26 @@
         items
           .map((vuelo) => {
             const origen =
-              vuelo.origen?.codigo ||
-              vuelo.origen ||
-              vuelo.ruta?.origen?.codigo ||
-              vuelo.ruta?.origen ||
-              "—";
-  
-            const destino =
-              vuelo.destino?.codigo ||
-              vuelo.destino ||
-              vuelo.ruta?.destino?.codigo ||
-              vuelo.ruta?.destino ||
-              "—";
-  
-            const aeronave =
-              vuelo.aeronave?.codigo ||
-              vuelo.aeronave?.modelo ||
-              vuelo.aeronave ||
-              "—";
+            vuelo.ruta_detalle?.origen ||
+            vuelo.origen ||
+            "—";
+
+          const destino =
+            vuelo.ruta_detalle?.destino ||
+            vuelo.destino ||
+            "—";
+
+          const aeronave =
+            vuelo.aeronave_detalle?.codigo ||
+            vuelo.aeronave_detalle?.modelo ||
+            vuelo.aeronave ||
+            "—";
   
             return `
               <tr>
                 <td class="mono">
                   ${API.escapeHtml(
-                    vuelo.codigo ||
-                    vuelo.codigo_vuelo ||
-                    "—"
+                  `Vuelo #${vuelo.id}`
                   )}
                 </td>
   
@@ -649,9 +661,8 @@
   
                 <td class="text-end mono">
                   ${API.escapeHtml(
-                    vuelo.asientos_disponibles ??
-                    vuelo.seats_available ??
-                    "—"
+                  vuelo.cupos_disponibles ??
+                  "—"
                   )}
                 </td>
               </tr>
