@@ -33,3 +33,7 @@ class SimularPagoSerializer(serializers.Serializer):
     monto = serializers.DecimalField(
         max_digits=10, decimal_places=2
     )
+    metodo = serializers.ChoiceField(
+        choices=["TARJETA", "EFECTIVO"],
+        default="TARJETA",
+    )

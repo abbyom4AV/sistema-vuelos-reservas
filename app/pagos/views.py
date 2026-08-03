@@ -52,6 +52,7 @@ class PagoViewSet(EnvelopeModelViewSetMixin, ModelViewSet):
                 reserva=reserva,
                 resultado=serializer.validated_data["resultado"],
                 monto=serializer.validated_data["monto"],
+                metodo=serializer.validated_data.get("metodo", "TARJETA"),
                 usuario=request.user,
                 request=request,
             )

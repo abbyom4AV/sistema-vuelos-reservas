@@ -8,7 +8,7 @@ from auditoria.models import Bitacora
 from .models import Pago
 
 @transaction.atomic
-def simular_pago(*, reserva, resultado, monto, usuario, request=None):
+def simular_pago(*, reserva, resultado, monto, metodo="SIMULADO", usuario, request=None):
     reserva = Reserva.objects.select_for_update().select_related("asiento", "vuelo").get(pk=reserva.pk)
 
     if reserva.estado != Reserva.Estado.PENDIENTE_PAGO:
@@ -18,6 +18,7 @@ def simular_pago(*, reserva, resultado, monto, usuario, request=None):
         reserva=reserva,
         estado=Pago.Estado.APROBADO if resultado == "APROBADO" else Pago.Estado.RECHAZADO,
         monto=monto,
+        metodo=metodo,
     )
 
     if resultado == "APROBADO":

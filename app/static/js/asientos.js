@@ -471,7 +471,8 @@ if (botonConfirmar) {
  */
 async function procesarPago(
 resultado,
-reserva
+reserva,
+metodo
 ) {
 
 const btnAprobado =
@@ -502,6 +503,7 @@ try {
       monto: Number(
         vueloActual?.precio_base || 0
       ),
+      metodo: metodo,
     }
   );
 
@@ -660,6 +662,29 @@ botonConfirmar.addEventListener(
 
           </div>
 
+<div class="mb-3">
+
+            <label
+              for="select-metodo-pago"
+              class="form-label fw-semibold"
+            >
+              Método de pago
+            </label>
+
+            <select
+              id="select-metodo-pago"
+              class="form-select"
+            >
+              <option value="TARJETA">
+                Tarjeta
+              </option>
+              <option value="EFECTIVO">
+                Efectivo
+              </option>
+            </select>
+
+          </div>
+
           <p class="fw-semibold mb-2">
             Simula el resultado del pago:
           </p>
@@ -715,14 +740,23 @@ botonConfirmar.addEventListener(
             "#btn-pago-rechazado"
           );
 
-        if (btnPagoAprobado) {
+if (btnPagoAprobado) {
 
           btnPagoAprobado.addEventListener(
             "click",
             function () {
+
+              const selectMetodo =
+                document.querySelector(
+                  "#select-metodo-pago"
+                );
+
               procesarPago(
                 "APROBADO",
-                reserva
+                reserva,
+                selectMetodo
+                  ? selectMetodo.value
+                  : "TARJETA"
               );
             }
           );
@@ -733,9 +767,18 @@ botonConfirmar.addEventListener(
           btnPagoRechazado.addEventListener(
             "click",
             function () {
+
+              const selectMetodo =
+                document.querySelector(
+                  "#select-metodo-pago"
+                );
+
               procesarPago(
                 "RECHAZADO",
-                reserva
+                reserva,
+                selectMetodo
+                  ? selectMetodo.value
+                  : "TARJETA"
               );
             }
           );
