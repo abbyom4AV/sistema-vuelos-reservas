@@ -12,28 +12,34 @@ class PagoSerializer(serializers.ModelSerializer):
             "estado",
             "monto",
             "metodo",
+            "cuenta",
             "creado_en",
             "actualizado_en",
         )
         read_only_fields = (
             "id",
             "estado",
-            "metodo",
             "creado_en",
             "actualizado_en",
         )
 
 
-class SimularPagoSerializer(serializers.Serializer):
+class IniciarPagoSerializer(serializers.Serializer):
 
     reserva = serializers.IntegerField()
-    resultado = serializers.ChoiceField(
-        choices=["APROBADO", "RECHAZADO"]
+    metodo = serializers.ChoiceField(
+        choices=["TARJETA", "PAYPAL"]
+    )
+    cuenta = serializers.CharField(
+        max_length=100
     )
     monto = serializers.DecimalField(
         max_digits=10, decimal_places=2
     )
-    metodo = serializers.ChoiceField(
-        choices=["TARJETA", "EFECTIVO"],
-        default="TARJETA",
+
+
+class VerificarPagoSerializer(serializers.Serializer):
+
+    codigo = serializers.CharField(
+        max_length=10
     )

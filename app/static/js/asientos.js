@@ -160,9 +160,6 @@ if (!asientos.length) {
   return;
 }
 
-/*
- * Ordenar por número de asiento.
- */
 asientos.sort(function (a, b) {
   return (
     Number(a.numero || 0) -
@@ -170,15 +167,6 @@ asientos.sort(function (a, b) {
   );
 });
 
-/*
- * Agrupar los asientos en filas de 6.
- *
- * Distribución:
- *
- * A B C | D E F
- *
- * El espacio central representa el PASILLO.
- */
 const filas = {};
 
 asientos.forEach(function (asiento) {
@@ -209,17 +197,11 @@ Object.keys(filas)
     const filaAsientos =
       filas[numeroFila];
 
-    /*
-     * Crear una fila visual.
-     */
     const fila = document.createElement("div");
 
     fila.className =
       "fila-asientos";
 
-    /*
-     * Número de fila.
-     */
     const numero = document.createElement(
       "div"
     );
@@ -232,18 +214,12 @@ Object.keys(filas)
 
     fila.appendChild(numero);
 
-    /*
-     * Asientos A, B, C
-     */
     const bloqueIzquierdo =
       document.createElement("div");
 
     bloqueIzquierdo.className =
       "bloque-asientos";
 
-    /*
-     * Pasillo.
-     */
     const pasillo =
       document.createElement("div");
 
@@ -253,18 +229,12 @@ Object.keys(filas)
     pasillo.innerHTML =
       "<span>PASILLO</span>";
 
-    /*
-     * Asientos D, E, F.
-     */
     const bloqueDerecho =
       document.createElement("div");
 
     bloqueDerecho.className =
       "bloque-asientos";
 
-    /*
-     * Crear exactamente 6 posiciones.
-     */
     for (let posicion = 0;
          posicion < 6;
          posicion++) {
@@ -280,10 +250,6 @@ Object.keys(filas)
       boton.className =
         "asiento-boton";
 
-      /*
-       * Si no existe asiento en esa posición,
-       * dejamos el espacio vacío.
-       */
       if (!asiento) {
 
         boton.classList.add(
@@ -346,9 +312,6 @@ Object.keys(filas)
         }
       }
 
-      /*
-       * A, B, C
-       */
       if (posicion < 3) {
 
         bloqueIzquierdo.appendChild(
@@ -357,9 +320,6 @@ Object.keys(filas)
 
       } else {
 
-        /*
-         * D, E, F
-         */
         bloqueDerecho.appendChild(
           boton
         );
@@ -403,10 +363,6 @@ asiento,
 boton
 ) {
 
-
-/*
- * Quitar selección anterior.
- */
 document
   .querySelectorAll(
     ".asiento-boton.asiento-seleccionado"
@@ -419,9 +375,6 @@ document
 
   });
 
-/*
- * Marcar nuevo asiento.
- */
 boton.classList.add(
   "asiento-seleccionado"
 );
@@ -465,110 +418,285 @@ if (botonConfirmar) {
 }
 
 /*
- * Envía el resultado del pago simulado
- * al backend y actualiza la interfaz
- * con el resultado real de la reserva.
+ * =========================================================
+ * FLUJO DE PAGO — 3 etapas, todo dentro de #panel-pago
+ *
+ * Etapa A: método (Tarjeta/PayPal) + cuenta -> POST .../iniciar/
+ * Etapa B: código de verificación -> POST .../{id}/verificar/
+ * Etapa C: resultado final (confirmado o rechazado)
+ * =========================================================
  */
-async function procesarPago(
-resultado,
-reserva,
-metodo
-) {
 
-const btnAprobado =
-  document.querySelector(
-    "#btn-pago-aprobado"
-  );
+function pintarEtapaMetodo(panel, reserva) {
 
-const btnRechazado =
-  document.querySelector(
-    "#btn-pago-rechazado"
-  );
+  panel.innerHTML = `
 
-const resultadoPago =
-  document.querySelector(
-    "#resultado-pago"
-  );
+    <p class="fw-semibold mb-2">
+      Completa el pago de tu reserva:
+    </p>
 
-if (btnAprobado) btnAprobado.disabled = true;
-if (btnRechazado) btnRechazado.disabled = true;
+    <div class="mb-3">
+      <label for="select-metodo-pago" class="form-label">
+        Método de pago
+      </label>
+      <select id="select-metodo-pago" class="form-select">
+        <option value="TARJETA">Tarjeta</option>
+        <option value="PAYPAL">PayPal</option>
+      </select>
+    </div>
 
-try {
+    <div class="mb-3" id="campo-cuenta-tarjeta">
+      <label for="input-numero-tarjeta" class="form-label">
+        Número de tarjeta
+      </label>
+      <input
+        type="text"
+        id="input-numero-tarjeta"
+        class="form-control"
+        placeholder="0000000000000000"
+        maxlength="20"
+      >
+    </div>
 
-  const pago = await API.post(
-    "/api/pagos/pagos/",
-    {
-      reserva: Number(reserva?.id),
-      resultado: resultado,
-      monto: Number(
-        vueloActual?.precio_base || 0
-      ),
-      metodo: metodo,
-    }
-  );
+    <div class="mb-3 d-none" id="campo-cuenta-paypal">
+      <label for="input-correo-paypal" class="form-label">
+        Correo de PayPal
+      </label>
+      <input
+        type="email"
+        id="input-correo-paypal"
+        class="form-control"
+        placeholder="correo@ejemplo.com"
+      >
+    </div>
 
-  if (resultadoPago) {
+    <div id="error-pago" class="alert alert-danger d-none"></div>
 
-    if (pago.estado === "APROBADO") {
+    <button
+      type="button"
+      id="btn-pagar"
+      class="btn btn-primary btn-lg w-100"
+    >
+      <i class="bi bi-credit-card"></i>
+      Pagar
+    </button>
+  `;
 
-      resultadoPago.innerHTML = `
-        <div class="alert alert-success mb-0">
-          <i class="bi bi-check-circle-fill"></i>
-          Pago aprobado. Tu reserva quedó
-          <strong>confirmada</strong>.
-        </div>
-      `;
+  const selectMetodo = panel.querySelector("#select-metodo-pago");
+  const campoTarjeta = panel.querySelector("#campo-cuenta-tarjeta");
+  const campoPaypal = panel.querySelector("#campo-cuenta-paypal");
 
-    } else {
+  if (selectMetodo) {
 
-      resultadoPago.innerHTML = `
-        <div class="alert alert-danger mb-0">
-          <i class="bi bi-x-circle-fill"></i>
-          Pago rechazado. Tu reserva fue
-          <strong>cancelada</strong> y el asiento
-          quedó disponible nuevamente.
-        </div>
-      `;
-    }
+    selectMetodo.addEventListener("change", function () {
+
+      if (this.value === "PAYPAL") {
+        campoTarjeta.classList.add("d-none");
+        campoPaypal.classList.remove("d-none");
+      } else {
+        campoPaypal.classList.add("d-none");
+        campoTarjeta.classList.remove("d-none");
+      }
+    });
   }
 
-  if (btnAprobado) btnAprobado.style.display = "none";
-  if (btnRechazado) btnRechazado.style.display = "none";
+  const btnPagar = panel.querySelector("#btn-pagar");
 
-  /*
-   * Recargar la matriz para reflejar
-   * el estado real del asiento tras el pago.
-   */
-  await cargarAsientos();
+  if (btnPagar) {
 
-} catch (error) {
+    btnPagar.addEventListener("click", async function () {
 
-  console.error(
-    "Error procesando el pago:",
-    error
-  );
+      const metodo = selectMetodo ? selectMetodo.value : "TARJETA";
 
-  if (resultadoPago) {
+      let cuenta = "";
 
-    resultadoPago.innerHTML = `
+      if (metodo === "PAYPAL") {
+        const inputPaypal = panel.querySelector("#input-correo-paypal");
+        cuenta = inputPaypal ? inputPaypal.value.trim() : "";
+      } else {
+        const inputTarjeta = panel.querySelector("#input-numero-tarjeta");
+        cuenta = inputTarjeta ? inputTarjeta.value.trim() : "";
+      }
+
+      const errorPago = panel.querySelector("#error-pago");
+
+      if (errorPago) errorPago.classList.add("d-none");
+
+      if (!cuenta) {
+        if (errorPago) {
+          errorPago.textContent = "Ingresa los datos de la cuenta de pago.";
+          errorPago.classList.remove("d-none");
+        }
+        return;
+      }
+
+      btnPagar.disabled = true;
+      btnPagar.innerHTML = `
+        <span class="spinner-border spinner-border-sm"></span>
+        Procesando...
+      `;
+
+      try {
+
+        const pago = await API.post(
+          "/api/pagos/pagos/iniciar/",
+          {
+            reserva: Number(reserva?.id),
+            metodo: metodo,
+            cuenta: cuenta,
+            monto: Number(vueloActual?.precio_base || 0),
+          }
+        );
+
+        if (pago.estado === "RECHAZADO") {
+          pintarEtapaResultado(panel, false);
+          await cargarAsientos();
+          return;
+        }
+
+        pintarEtapaVerificacion(panel, pago);
+
+      } catch (error) {
+
+        console.error("Error iniciando el pago:", error);
+
+        if (errorPago) {
+          errorPago.textContent =
+            error.message || "No fue posible procesar el pago.";
+          errorPago.classList.remove("d-none");
+        }
+
+        btnPagar.disabled = false;
+        btnPagar.innerHTML = `
+          <i class="bi bi-credit-card"></i>
+          Pagar
+        `;
+      }
+    });
+  }
+}
+
+function pintarEtapaVerificacion(panel, pago) {
+
+  panel.innerHTML = `
+
+    <div class="alert alert-info">
+      <i class="bi bi-envelope-check"></i>
+      Se envió un código de verificación a tu correo (simulado).
+      <br>
+      <span class="text-subtle small">
+        Código de prueba (solo demo):
+        <strong>${API.escapeHtml(pago.codigo_demo || "")}</strong>
+      </span>
+    </div>
+
+    <div class="mb-3">
+      <label for="input-codigo-verificacion" class="form-label">
+        Código de verificación
+      </label>
+      <input
+        type="text"
+        id="input-codigo-verificacion"
+        class="form-control"
+        maxlength="6"
+        placeholder="000000"
+      >
+    </div>
+
+    <div id="error-verificacion" class="alert alert-danger d-none"></div>
+
+    <button
+      type="button"
+      id="btn-verificar-codigo"
+      class="btn btn-success btn-lg w-100"
+    >
+      <i class="bi bi-check-circle"></i>
+      Verificar y confirmar reserva
+    </button>
+  `;
+
+  const btnVerificar = panel.querySelector("#btn-verificar-codigo");
+
+  if (btnVerificar) {
+
+    btnVerificar.addEventListener("click", async function () {
+
+      const inputCodigo = panel.querySelector("#input-codigo-verificacion");
+      const codigo = inputCodigo ? inputCodigo.value.trim() : "";
+
+      const errorVerificacion = panel.querySelector("#error-verificacion");
+
+      if (errorVerificacion) errorVerificacion.classList.add("d-none");
+
+      if (!codigo) {
+        if (errorVerificacion) {
+          errorVerificacion.textContent = "Ingresa el código de verificación.";
+          errorVerificacion.classList.remove("d-none");
+        }
+        return;
+      }
+
+      btnVerificar.disabled = true;
+      btnVerificar.innerHTML = `
+        <span class="spinner-border spinner-border-sm"></span>
+        Verificando...
+      `;
+
+      try {
+
+        await API.post(
+          `/api/pagos/pagos/${pago.id}/verificar/`,
+          { codigo: codigo }
+        );
+
+        pintarEtapaResultado(panel, true);
+        await cargarAsientos();
+
+      } catch (error) {
+
+        console.error("Error verificando el pago:", error);
+
+        if (errorVerificacion) {
+          errorVerificacion.textContent =
+            error.message || "No fue posible verificar el código.";
+          errorVerificacion.classList.remove("d-none");
+        }
+
+        btnVerificar.disabled = false;
+        btnVerificar.innerHTML = `
+          <i class="bi bi-check-circle"></i>
+          Verificar y confirmar reserva
+        `;
+      }
+    });
+  }
+}
+
+function pintarEtapaResultado(panel, aprobado) {
+
+  if (aprobado) {
+
+    panel.innerHTML = `
+      <div class="alert alert-success mb-0">
+        <i class="bi bi-check-circle-fill"></i>
+        Pago verificado. Tu reserva quedó <strong>confirmada</strong>.
+      </div>
+    `;
+
+  } else {
+
+    panel.innerHTML = `
       <div class="alert alert-danger mb-0">
-        ${API.escapeHtml(
-          error.message ||
-          "No fue posible procesar el pago."
-        )}
+        <i class="bi bi-x-circle-fill"></i>
+        El saldo de la cuenta no cubre el monto de la reserva.
+        El pago fue <strong>rechazado</strong> y el asiento
+        quedó disponible nuevamente.
       </div>
     `;
   }
-
-  if (btnAprobado) btnAprobado.disabled = false;
-  if (btnRechazado) btnRechazado.disabled = false;
-}
-
-
 }
 
 if (botonConfirmar) {
-
 
 botonConfirmar.addEventListener(
   "click",
@@ -622,166 +750,42 @@ botonConfirmar.addEventListener(
         resumenAsiento.style.display =
           "block";
 
+        /*
+         * El encabezado ("Reserva creada") vive
+         * fijo. #panel-pago es el contenedor
+         * separado que las 3 etapas del pago
+         * van sobreescribiendo, sin tocar el
+         * encabezado.
+         */
         resumenAsiento.innerHTML = `
 
           <div class="alert alert-success">
 
             <h4 class="alert-heading">
-
-              <i
-                class="bi bi-check-circle-fill"
-              ></i>
-
+              <i class="bi bi-check-circle-fill"></i>
               Reserva creada correctamente
-
             </h4>
 
             <p class="mb-2">
-
               Tu asiento seleccionado es:
-
-              <strong>
-                ${API.escapeHtml(
-                  codigo
-                )}
-              </strong>
-
+              <strong>${API.escapeHtml(codigo)}</strong>
             </p>
 
             <p class="mb-0">
-
               Código de reserva:
-
-              <strong>
-                #${API.escapeHtml(
-                  reserva?.id || ""
-                )}
-              </strong>
-
+              <strong>#${API.escapeHtml(reserva?.id || "")}</strong>
             </p>
 
           </div>
 
-<div class="mb-3">
-
-            <label
-              for="select-metodo-pago"
-              class="form-label fw-semibold"
-            >
-              Método de pago
-            </label>
-
-            <select
-              id="select-metodo-pago"
-              class="form-select"
-            >
-              <option value="TARJETA">
-                Tarjeta
-              </option>
-              <option value="EFECTIVO">
-                Efectivo
-              </option>
-            </select>
-
-          </div>
-
-          <p class="fw-semibold mb-2">
-            Simula el resultado del pago:
-          </p>
-
-          <div
-            class="d-grid gap-2 d-sm-flex"
-          >
-
-            <button
-              type="button"
-              id="btn-pago-aprobado"
-              class="btn btn-success btn-lg flex-fill"
-            >
-
-              <i
-                class="bi bi-check-circle"
-              ></i>
-
-              Simular pago aprobado
-
-            </button>
-
-            <button
-              type="button"
-              id="btn-pago-rechazado"
-              class="btn btn-outline-danger btn-lg flex-fill"
-            >
-
-              <i
-                class="bi bi-x-circle"
-              ></i>
-
-              Simular pago rechazado
-
-            </button>
-
-          </div>
-
-          <div
-            id="resultado-pago"
-            class="mt-3"
-          ></div>
-
+          <div id="panel-pago"></div>
         `;
 
-        const btnPagoAprobado =
-          document.querySelector(
-            "#btn-pago-aprobado"
-          );
+        const panelPago =
+          resumenAsiento.querySelector("#panel-pago");
 
-        const btnPagoRechazado =
-          document.querySelector(
-            "#btn-pago-rechazado"
-          );
-
-if (btnPagoAprobado) {
-
-          btnPagoAprobado.addEventListener(
-            "click",
-            function () {
-
-              const selectMetodo =
-                document.querySelector(
-                  "#select-metodo-pago"
-                );
-
-              procesarPago(
-                "APROBADO",
-                reserva,
-                selectMetodo
-                  ? selectMetodo.value
-                  : "TARJETA"
-              );
-            }
-          );
-        }
-
-        if (btnPagoRechazado) {
-
-          btnPagoRechazado.addEventListener(
-            "click",
-            function () {
-
-              const selectMetodo =
-                document.querySelector(
-                  "#select-metodo-pago"
-                );
-
-              procesarPago(
-                "RECHAZADO",
-                reserva,
-                selectMetodo
-                  ? selectMetodo.value
-                  : "TARJETA"
-              );
-            }
-          );
+        if (panelPago) {
+          pintarEtapaMetodo(panelPago, reserva);
         }
       }
 
@@ -795,16 +799,8 @@ if (btnPagoAprobado) {
 
       }
 
-      /*
-       * Recargar la matriz para que el asiento
-       * confirmado pase inmediatamente a reservado.
-       */
       await cargarAsientos();
 
-      /*
-       * Evitar que se pueda crear otra reserva
-       * desde el mismo flujo.
-       */
       botonConfirmar.style.display =
         "none";
 
@@ -841,7 +837,6 @@ if (btnPagoAprobado) {
     }
   }
 );
-
 
 }
 
