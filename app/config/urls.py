@@ -45,7 +45,28 @@ urlpatterns = [
     ),
     
     path(
-    "",
-    include("interfaz.urls"),
-),
+        "",
+        include("interfaz.urls"),
+    ),
+
+    path(
+        "api/vuelos/",
+        include("vuelos.urls"),
+    ),
+
+    path(
+        "api/reservas/",
+        include("reservas.urls"),
+    ),
+
+    path(
+        "api/pagos/",
+        include("pagos.urls"),
+    ),
+
+    path(
+        "api/reportes/",
+        include("reportes.urls"),
+    ),
+
 ]

@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block titulo %}
+FlyTrack · Reservas
+{% endblock %}
+
+{% block contenido %}
+
+<div class="app-shell">
+
+```
+{% include "interfaz/_sidebar.html" %}
+
+<main class="main-content">
+
+    <div class="container-fluid py-4">
+
+        <!-- ENCABEZADO -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+                <h1 class="mb-1">
+                    <i class="bi bi-journal-check"></i>
+                    Reservar vuelo
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Selecciona un vuelo disponible y elige directamente tu asiento.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- MENSAJES -->
+
+        <div id="mensaje-reserva" class="mb-3"></div>
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <div class="row g-4">
+
+
+            <!-- SELECCIÓN DE VUELO -->
+
+            <div class="col-12 col-lg-5">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+
+                        <h5 class="mb-0">
+                            <i class="bi bi-airplane"></i>
+                            Seleccionar vuelo
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <label
+                            for="select-vuelo"
+                            class="form-label"
+                        >
+                            Vuelo disponible
+                        </label>
+
+                        <select
+                            id="select-vuelo"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Cargando vuelos...
+                            </option>
+
+                        </select>
+
+
+                        <!-- DETALLE DEL VUELO -->
+
+                        <div
+                            id="detalle-vuelo"
+                            class="mt-4"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LEYENDA -->
+
+                <div class="card shadow-sm mt-4">
+
+                    <div class="card-body">
+
+                        <h6 class="mb-3">
+                            Estado de asientos
+                        </h6>
+
+                        <div class="d-flex flex-wrap gap-3">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="leyenda-asiento disponible"></span>
+                                <span>Disponible</span>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="leyenda-asiento seleccionado"></span>
+                                <span>Seleccionado</span>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="leyenda-asiento reservado"></span>
+                                <span>Reservado</span>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="leyenda-asiento bloqueado"></span>
+                                <span>Bloqueado</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MATRIZ DE ASIENTOS -->
+
+            <div class="col-12 col-lg-7">
+
+                <div class="card shadow-sm">
+
+                    <div class="card-header">
+
+                        <h5 class="mb-0">
+                            <i class="bi bi-grid-3x3-gap"></i>
+                            Selección de asiento
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div
+                            id="mapa-asientos"
+                            class="text-center text-muted py-5"
+                        >
+
+                            <i class="bi bi-airplane fs-1"></i>
+
+                            <p class="mt-3 mb-0">
+                                Selecciona un vuelo para visualizar los asientos.
+                            </p>
+
+                        </div>
+
+
+                        <!-- ACCIONES -->
+
+                        <div
+                            id="acciones-reserva"
+                            class="text-center mt-4"
+                        >
+
+                            <button
+                                id="btn-reservar"
+                                type="button"
+                                class="btn btn-primary"
+                                disabled
+                            >
+
+                                <i class="bi bi-check-circle"></i>
+
+                                Confirmar asiento y crear reserva
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- BOTÓN PARA INTEGRANTE #3 -->
+
+                        <div
+                            id="accion-pago"
+                            class="text-center mt-3 d-none"
+                        >
+
+                            <div class="alert alert-success mb-3">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Reserva creada correctamente.
+                                El asiento ha sido seleccionado y reservado.
+
+                            </div>
+
+                            <button
+                                id="btn-proceder-pago"
+                                type="button"
+                                class="btn btn-success btn-lg"
+                            >
+
+                                <i class="bi bi-credit-card"></i>
+
+                                Proceder al pago
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MIS RESERVAS -->
+
+        <div class="card shadow-sm mt-5">
+
+            <div class="card-header">
+
+                <h5 class="mb-0">
+
+                    <i class="bi bi-journal-bookmark"></i>
+
+                    Mis reservas
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div id="lista-reservas">
+
+                    <div class="text-center text-muted py-4">
+
+                        Cargando reservas...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+```
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/api.js' %}?v=2"></script>
+
+<script src="{% static 'js/reservas.js' %}?v=3"></script>
+
+{% endblock %}

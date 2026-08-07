@@ -1,4 +1,5 @@
 {% extends "base_auth.html" %}
+{% load static %}
 
 {% block titulo %}
 Mis reservas · FlyTrack
@@ -45,31 +46,47 @@ Mis reservas · FlyTrack
   </a>
 </div>
 
-<section class="travel-empty-reservations">
+<div
+  id="estado-mis-reservas"
+  class="alert alert-info"
+  role="status"
+>
+  Cargando tus reservas...
+</div>
+
+<div
+  id="lista-mis-reservas"
+  class="row g-3"
+></div>
+
+<section
+  id="sin-reservas"
+  class="travel-empty-reservations"
+  style="display: none;"
+>
   <div class="travel-empty-icon">
     <i class="bi bi-ticket-perforated"></i>
   </div>
 
-  <span class="travel-status">
-    <i class="bi bi-clock-history"></i>
-    Próximamente
-  </span>
-
   <h2>
-    Aquí verás tus próximos viajes
+    Todavía no tienes reservas
   </h2>
 
   <p>
-    Cuando la compra de vuelos esté disponible, podrás consultar detalles,
-    estados de pago y documentos de cada reserva.
+    Cuando reserves un vuelo, aquí podrás consultar su estado,
+    el pago asociado y descargar tu comprobante.
   </p>
 
   <a
     href="{% url 'interfaz:buscar-vuelos' %}"
     class="btn btn-outline-primary"
   >
-    Conocer la búsqueda de vuelos
+    Buscar vuelos
     <i class="bi bi-arrow-right"></i>
   </a>
 </section>
 {% endblock %}
+
+{% block panel_js %}
+<script src="{% static 'js/mis-reservas.js' %}?v=1"></script>
+{% endblock %}docker compose restart web

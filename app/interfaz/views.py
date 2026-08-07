@@ -78,3 +78,49 @@ def cambiar_contrasena_view(request):
         request,
         "interfaz/cambiar_contrasena.html",
     )
+
+def aeronaves_view(request):
+    return render(
+        request,
+        "interfaz/aeronaves.html",
+    )
+
+
+def rutas_view(request):
+    return render(
+        request,
+        "interfaz/rutas.html",
+    )
+
+
+def vuelos_view(request):
+    return render(
+        request,
+        "interfaz/vuelos.html",
+    )
+
+
+def reservas_view(request):
+    return render(
+        request,
+        "interfaz/reservas.html",
+    )
+
+def pago_view(request):
+    return render(
+        request,
+        "interfaz/pago.html",
+    )
+
+def reportes_view(request):
+    return render(
+        request,
+        "interfaz/reportes.html",
+    )
+
+def asientos_view(request):
+    return render(
+        request,
+        "interfaz/asientos.html",
+    )
+

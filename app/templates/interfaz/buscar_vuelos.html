@@ -1,18 +1,18 @@
 {% extends "base_auth.html" %}
+{% load static %}
 
 {% block titulo %}
 Buscar vuelos · FlyTrack
 {% endblock %}
 
-{% block rol_requerido %}CLIENTE{% endblock %}
-
 {% block breadcrumbs %}
+
 <nav class="app-crumbs" aria-label="breadcrumb">
   <a href="{% url 'interfaz:panel' %}">
     Inicio
   </a>
 
-  <span class="sep">/</span>
+<span class="sep">/</span>
 
   <span aria-current="page">
     Buscar vuelos
@@ -21,143 +21,246 @@ Buscar vuelos · FlyTrack
 {% endblock %}
 
 {% block panel %}
+
 <section class="travel-hero">
   <div class="travel-hero-content">
     <p class="travel-eyebrow">
       Planifica tu próximo destino
     </p>
 
-    <h1>
-      Encuentra vuelos para tu próximo viaje
-    </h1>
+<h1>
+  Encuentra vuelos para tu próximo viaje
+</h1>
 
-    <p>
-      Explora rutas, compara horarios y administra tus viajes desde un solo lugar.
-    </p>
+<p>
+  Explora rutas, horarios y disponibilidad de vuelos desde un solo lugar.
+</p>
+
   </div>
 </section>
 
-<section class="travel-search-card" aria-labelledby="titulo-busqueda">
+<section
+  class="travel-search-card"
+  aria-labelledby="titulo-busqueda"
+>
+
   <div class="travel-search-header">
-    <div>
-      <h2 id="titulo-busqueda">
-        Busca tu vuelo
-      </h2>
 
-      <p>
-        Selecciona los datos de tu viaje para consultar disponibilidad.
-      </p>
-    </div>
 
-    <span class="travel-status">
-      <i class="bi bi-clock-history"></i>
-      Próximamente
-    </span>
+<div>
+  <h2 id="titulo-busqueda">
+    Busca tu vuelo
+  </h2>
+
+  <p>
+    Selecciona los datos de tu viaje para consultar vuelos disponibles.
+  </p>
+</div>
+
+<span class="travel-status">
+  <i class="bi bi-search"></i>
+  Disponible
+</span>
+
   </div>
 
-  <form class="row g-3" aria-label="Búsqueda de vuelos">
-    <div class="col-12 col-md-6 col-xl-3">
-      <label class="form-label" for="vuelo-origen">
-        Origen
-      </label>
+  <form
+    id="form-busqueda-vuelos"
+    class="row g-3"
+    aria-label="Búsqueda de vuelos"
+  >
 
-      <div class="travel-field">
-        <i class="bi bi-geo-alt" aria-hidden="true"></i>
-        <input
-          id="vuelo-origen"
-          class="form-control"
-          type="text"
-          placeholder="Ciudad o aeropuerto"
-          disabled
-        >
-      </div>
-    </div>
+<div class="col-12 col-md-6 col-xl-4">
 
-    <div class="col-12 col-md-6 col-xl-3">
-      <label class="form-label" for="vuelo-destino">
-        Destino
-      </label>
+  <label
+    class="form-label"
+    for="vuelo-origen"
+  >
+    Origen
+  </label>
 
-      <div class="travel-field">
-        <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
-        <input
-          id="vuelo-destino"
-          class="form-control"
-          type="text"
-          placeholder="¿A dónde quieres ir?"
-          disabled
-        >
-      </div>
-    </div>
+  <div class="travel-field">
 
-    <div class="col-6 col-md-4 col-xl-2">
-      <label class="form-label" for="vuelo-salida">
-        Salida
-      </label>
+    <i
+      class="bi bi-geo-alt"
+      aria-hidden="true"
+    ></i>
 
-      <input
-        id="vuelo-salida"
-        class="form-control"
-        type="text"
-        placeholder="Fecha"
-        disabled
-      >
-    </div>
+    <input
+      id="vuelo-origen"
+      class="form-control"
+      type="text"
+      placeholder="Ciudad de origen"
+    >
 
-    <div class="col-6 col-md-4 col-xl-2">
-      <label class="form-label" for="vuelo-regreso">
-        Regreso
-      </label>
+  </div>
 
-      <input
-        id="vuelo-regreso"
-        class="form-control"
-        type="text"
-        placeholder="Opcional"
-        disabled
-      >
-    </div>
+</div>
 
-    <div class="col-12 col-md-4 col-xl-2 d-flex align-items-end">
-      <button
-        type="button"
-        class="btn btn-primary w-100 justify-content-center"
-        disabled
-      >
-        <i class="bi bi-search"></i>
-        Buscar vuelos
-      </button>
-    </div>
+
+<div class="col-12 col-md-6 col-xl-4">
+
+  <label
+    class="form-label"
+    for="vuelo-destino"
+  >
+    Destino
+  </label>
+
+  <div class="travel-field">
+
+    <i
+      class="bi bi-geo-alt-fill"
+      aria-hidden="true"
+    ></i>
+
+    <input
+      id="vuelo-destino"
+      class="form-control"
+      type="text"
+      placeholder="Ciudad de destino"
+    >
+
+  </div>
+
+</div>
+
+
+<div class="col-12 col-md-6 col-xl-2">
+
+  <label
+    class="form-label"
+    for="vuelo-fecha"
+  >
+    Fecha
+  </label>
+
+  <input
+    id="vuelo-fecha"
+    class="form-control"
+    type="date"
+  >
+
+</div>
+
+
+<div class="col-12 col-md-6 col-xl-2 d-flex align-items-end">
+
+  <button
+    type="submit"
+    class="btn btn-primary w-100 justify-content-center"
+  >
+
+    <i class="bi bi-search"></i>
+
+    Buscar vuelos
+
+  </button>
+
+</div>
+
   </form>
 
-  <p class="travel-search-note mb-0">
-    La búsqueda y compra de vuelos estará disponible cuando se publiquen las rutas y tarifas.
+  <div
+    id="estado-busqueda"
+    class="alert alert-info mt-3 mb-0"
+    role="status"
+  >
+    Utiliza los filtros para buscar vuelos disponibles.
+  </div>
+
+</section>
+
+<section
+  id="resultados-vuelos"
+  class="mt-4"
+>
+
+  <div
+    class="d-flex justify-content-between align-items-center mb-3"
+  >
+
+<div>
+
+  <h2>
+    Vuelos disponibles
+  </h2>
+
+  <p class="text-muted mb-0">
+    Selecciona un vuelo para continuar con tu reserva.
   </p>
+
+</div>
+
+  </div>
+
+  <div
+    id="lista-resultados-vuelos"
+    class="row g-3"
+  ></div>
+
 </section>
 
 <section class="row g-3 mt-1">
+
   <div class="col-12 col-md-4">
-    <article class="travel-feature h-100">
-      <i class="bi bi-calendar2-check"></i>
-      <h2>Reserva con claridad</h2>
-      <p>Consulta cada etapa de tu viaje y mantén tus datos centralizados.</p>
-    </article>
+
+
+<article class="travel-feature h-100">
+
+  <i class="bi bi-calendar2-check"></i>
+
+  <h2>
+    Reserva con claridad
+  </h2>
+
+  <p>
+    Consulta los detalles de cada vuelo antes de continuar con tu reserva.
+  </p>
+
+</article>
+
   </div>
 
   <div class="col-12 col-md-4">
-    <article class="travel-feature h-100">
-      <i class="bi bi-credit-card"></i>
-      <h2>Pago seguro</h2>
-      <p>Revisa el estado de tus pagos desde un flujo simple y protegido.</p>
-    </article>
+
+<article class="travel-feature h-100">
+
+  <i class="bi bi-airplane"></i>
+
+  <h2>
+    Consulta disponibilidad
+  </h2>
+
+  <p>
+    Visualiza los vuelos programados que todavía cuentan con cupos disponibles.
+  </p>
+
+</article>
+
   </div>
 
   <div class="col-12 col-md-4">
-    <article class="travel-feature h-100">
-      <i class="bi bi-bell"></i>
-      <h2>Información al momento</h2>
-      <p>Recibe notificaciones relevantes sobre tus vuelos y reservas.</p>
-    </article>
+
+<article class="travel-feature h-100">
+
+  <i class="bi bi-bell"></i>
+
+  <h2>
+    Información al momento
+  </h2>
+
+  <p>
+    Consulta información actualizada sobre tus vuelos y reservas.
+  </p>
+
+</article>
+
+
   </div>
+
 </section>
+
+<script src="{% static 'js/buscar_vuelos.js' %}?v=3"></script>
+
 {% endblock %}
