@@ -1,8 +1,8 @@
 # FlyTrack
 
-Proyecto al transporte aéreo. “Vehículos” se representa mediante
-aeronaves, “rutas y horarios” mediante rutas aéreas y vuelos programados, y los
-asientos se asociarán a cada vuelo cuando ese módulo sea implementado.
+FlyTrack es un sistema web para la gestión de vuelos y reservas. Permite
+administrar aeronaves, rutas, vuelos, usuarios, reservas, pagos,
+notificaciones y reportes.
 
 ## Tecnologías verificadas
 
@@ -29,7 +29,7 @@ docker compose exec web pytest
 
 ## Datos para probar el sistema
 
-Con los contenedores activos, ejecuta estos comandos una sola vez para cargar
+Con los contenedores activos, ejecute estos comandos una sola vez para cargar
 usuarios, vuelos, asientos, reservas y pagos de ejemplo:
 
 ```powershell
@@ -40,8 +40,8 @@ docker compose exec web python manage.py seed_demo_reservas
 ```
 
 El último comando crea 15 reservas de prueba. Incluye pagos aprobados,
-pendientes, en verificación y rechazados. Puedes ejecutarlo de nuevo sin que se
-dupliquen los datos.
+pendientes, en verificación y rechazados. Puede ejecutarse de nuevo sin
+duplicar los datos.
 
 Los vuelos estarán disponibles para las cuentas de cliente. El administrador
 puede revisar todas las reservas en **Reservas**, mientras que cada cliente ve
