@@ -22,3 +22,22 @@ asientos se asociarán a cada vuelo cuando ese módulo sea implementado.
 
 Las pruebas usan SQLite en memoria mediante `config.settings_test`, por lo que
 no modifican la base MySQL de desarrollo:
+
+```powershell
+docker compose exec web pytest
+```
+
+## Datos de demostración
+
+Con los contenedores activos, un integrante puede cargar los mismos datos
+locales de demostración con los siguientes comandos:
+
+```powershell
+docker compose exec web python manage.py migrate --noinput
+docker compose exec web python manage.py seed_base --admin-password "UnaClaveDemoSegura"
+Get-Content app/vuelos/seed_operatico.sql -Raw | docker compose exec -T db sh -c 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"'
+docker compose exec web python manage.py seed_demo_reservas
+```
+
+La última semilla es idempotente y crea 15 reservas con pagos aprobados,
+pendientes, en verificación y rechazados para el panel administrativo.
