@@ -18,6 +18,9 @@ env/
 # Variables privadas
 .env
 
+# Evidencias locales
+Docs/Evidencias_Integrante_1/
+
 # IDE
 .vscode/
 .idea/

@@ -2626,6 +2626,34 @@ body:has(#form-otp) .otp-demo {
   opacity: 0.7;
 }
 
+.leyenda-asiento {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+
+.leyenda-asiento.disponible {
+  background: #d1e7dd;
+  border-color: #198754;
+}
+
+.leyenda-asiento.seleccionado {
+  background: var(--color-primary);
+  border-color: var(--color-primary-600);
+}
+
+.leyenda-asiento.reservado {
+  background: var(--color-danger);
+  border-color: #991b1b;
+}
+
+.leyenda-asiento.bloqueado {
+  background: #6c757d;
+  border-color: #495057;
+}
+
 
 /* ==========================================================================
    MATRIZ DE ASIENTOS DEL AVIÓN
