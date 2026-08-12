@@ -15,8 +15,8 @@ asientos se asociarán a cada vuelo cuando ese módulo sea implementado.
 
 ## Roles
 
-- `ADMINISTRADOR`: administra usuarios y consulta bitácora.
-- `CLIENTE`: usa funcionalidades propias, perfil y notificaciones.
+- `ADMINISTRADOR`: administra usuarios, vuelos, reservas y consultas del sistema.
+- `CLIENTE`: busca vuelos, realiza reservas y consulta sus pagos y notificaciones.
 
 ## Pruebas
 
@@ -27,10 +27,10 @@ no modifican la base MySQL de desarrollo:
 docker compose exec web pytest
 ```
 
-## Datos de demostración
+## Datos para probar el sistema
 
-Con los contenedores activos, un integrante puede cargar los mismos datos
-locales de demostración con los siguientes comandos:
+Con los contenedores activos, ejecuta estos comandos una sola vez para cargar
+usuarios, vuelos, asientos, reservas y pagos de ejemplo:
 
 ```powershell
 docker compose exec web python manage.py migrate --noinput
@@ -39,5 +39,10 @@ Get-Content app/vuelos/seed_operatico.sql -Raw | docker compose exec -T db sh -c
 docker compose exec web python manage.py seed_demo_reservas
 ```
 
-La última semilla es idempotente y crea 15 reservas con pagos aprobados,
-pendientes, en verificación y rechazados para el panel administrativo.
+El último comando crea 15 reservas de prueba. Incluye pagos aprobados,
+pendientes, en verificación y rechazados. Puedes ejecutarlo de nuevo sin que se
+dupliquen los datos.
+
+Los vuelos estarán disponibles para las cuentas de cliente. El administrador
+puede revisar todas las reservas en **Reservas**, mientras que cada cliente ve
+solamente las suyas en **Mis reservas**.
