@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from pagos.models import Pago
 from vuelos.models import Asiento, Vuelo
 
 from .models import Reserva
@@ -110,6 +111,8 @@ class ReservaDetalleSerializer(serializers.ModelSerializer):
 
     vuelo_detalle = serializers.SerializerMethodField()
     asiento_detalle = serializers.SerializerMethodField()
+    usuario_detalle = serializers.SerializerMethodField()
+    pago_detalle = serializers.SerializerMethodField()
 
     class Meta:
         model = Reserva
@@ -118,10 +121,12 @@ class ReservaDetalleSerializer(serializers.ModelSerializer):
             "id",
             "codigo",
             "usuario",
+            "usuario_detalle",
             "vuelo",
             "vuelo_detalle",
             "asiento",
             "asiento_detalle",
+            "pago_detalle",
             "estado",
             "creado_en",
             "actualizado_en",
@@ -131,10 +136,12 @@ class ReservaDetalleSerializer(serializers.ModelSerializer):
             "id",
             "codigo",
             "usuario",
+            "usuario_detalle",
             "vuelo",
             "vuelo_detalle",
             "asiento",
             "asiento_detalle",
+            "pago_detalle",
             "estado",
             "creado_en",
             "actualizado_en",
@@ -172,6 +179,13 @@ class ReservaDetalleSerializer(serializers.ModelSerializer):
             "cupos_disponibles": obj.vuelo.cupos_disponibles,
         }
 
+    def get_usuario_detalle(self, obj):
+        return {
+            "id": obj.usuario.id,
+            "nombre": obj.usuario.get_full_name() or obj.usuario.username,
+            "email": obj.usuario.email,
+        }
+
     def get_asiento_detalle(self, obj):
 
         if not obj.asiento:
@@ -184,4 +198,17 @@ class ReservaDetalleSerializer(serializers.ModelSerializer):
             "fila": obj.asiento.fila,
             "letra": obj.asiento.letra,
             "estado": obj.asiento.estado,
+        }
+
+    def get_pago_detalle(self, obj):
+        try:
+            pago = obj.pago
+        except Pago.DoesNotExist:
+            return None
+
+        return {
+            "id": pago.id,
+            "estado": pago.estado,
+            "monto": pago.monto,
+            "metodo": pago.metodo,
         }

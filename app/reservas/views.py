@@ -63,6 +63,7 @@ class ReservaViewSet(
             "vuelo__ruta",
             "vuelo__aeronave",
             "asiento",
+            "pago",
         )
     )
 
